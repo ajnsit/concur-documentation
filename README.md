@@ -33,24 +33,44 @@ Look at the individual pages for [Concur (Haskell)](https://github.com/ajnsit/co
 
 ** To simplify things, all the following examples will be in Purescript, using the React backend **
 
+#### A Widget
+
+Concur is built around composing `Widget`s. A Widgete is something that has a `View` i.e. a User-Interface, can change in response to some events, and finally return some value.
+
+The type Widget is parameterised by the type of the View, and the return type.
+
+```purescript
+-- A Widget with a View of type HTML (i.e. client side web apps), and returning an Int
+foo :: Widget HTML Int
+```
+
+Especially note that the type of Events handled by the Widget is not a part of its type signature. Nor does the type signature include the type of the `Action`s performed by the Widget. This is important because each Widget in Concur is self sufficient and can be populated on the page without worrying about the inputs and outputs. All the inputs and outputs are wired at the time of Widget definition, and the user does not need to bother with them at the time of usage.
+
 #### Hello World
 
 Here's a simple widget that displays a button with the text "Hello Sailor!" in Concur -
 
 ```purescript
-helloWidget = button' [text "Hello Sailor!"]
+hello :: forall a. Widget HTML a
+hello = button' [text "Hello Sailor!"]
 ```
+Concur provides a very simple DSL for constructing HTML DOM elements. This widget is a button with some text inside it. Note that the return type of the widget is effectively `forall a. a` i.e. this widget never returns a value. This is distinct from a return value of `unit` (or `()` in Haskell) which denotes no **useful** value. 
 
-Concur provides a very simple DSL for constructing HTML DOM elements. The resulting widget is self contained and can be easily populated on the page (within a div with the id "hello") -
+The complete type of the widget - `forall a. Widget HTML a` is also automatically inferred by the compiler, so need not be specified. The return type is inferred as `forall a. a` because we have not attached any event handlers to the widget, so any dom elements created are static and never end or change. More on this later.
+
+The resulting widget is self contained and can be easily populated on the page (within a div with the id "hello") -
 
 ```purescript
 main = runWidgetInDom "hello" helloWidget
 ```
 
+#### Widget Composition
+
 Widgets can be easily laid out on the page using the HTML DSL. So you can create a layout with two buttons side by side like so -
 
 ```purescript
-div'
+hello :: forall a. Widget HTML a
+hello = div'
   [ button' [text "Ahoy Port!"]
   , button' [text "Ahoy Starboard!"]
   ]
@@ -60,7 +80,8 @@ div'
 Or one above the other (using div's to separate them) -
 
 ```purescript
-div'
+hello :: forall a. Widget HTML a
+hello = div'
   [ div'
       [ button' [text "Ahoy Port!"] ]
   , div'
@@ -69,7 +90,9 @@ div'
 
 ```
 
-Layout is composition *in space*. The two button widgets occupy different parts of the page, depending on the layout, but run together *in time*. Under the hood, composition in space is equivalent to Monoidal composition. The key characteristic of monoidal composition is that the type of the combined widget is the same as the type of the individual widgets. So the entire widget has the same type as that of a single button widget, and can be placed anywhere a single button can be.
+Layout is **composition** *in space*. The two button widgets occupy different parts of the page, depending on the layout, but run together *in time*. Under the hood, composition in space is equivalent to Monoidal composition. The key characteristic of monoidal composition is that the type of the combined widget is the same as the type of the individual widgets (which must match). As we saw earlier, the type of the individual buttons is `forall a. Widget HTML a`, so the type of the combined widget is also the same. So the entire widget can be placed anywhere a single button can be.
+
+This leads to surprising power, since effectively, the return values *bubble* up the DOM tree, and you can then handle the return value at any level of granularity.
 
 We'll further discuss layout later in this guide.
 
@@ -84,7 +107,8 @@ In Concur, you can just attach tags to the widgets to indicate the events you wi
 Let's say we want to show a greeting to the user when the button is is clicked. We can do so very easily, by attaching an `onClick` attribute to the button. We have to use `button` instead of `button'`. (`button'` is defined simply as `button []` for convenience).
 
 ```purescript
-helloWidget = do
+hello :: forall a. Widget HTML a
+hello = do
   button [onClick] [text "Say Hello"]
   text "Hello Sailor!"
 ```
@@ -93,10 +117,15 @@ That's right, `text` is also a complete widget on its own, which we are composin
 
 The final effect is that we see a button with the text "Say Hello", which when clicked gets replaced by text "Hello Sailor!". Ain't that easy!
 
+Again, pay attention to the final type of the widget. It's the same as before (`forall a. Widget HTML a`) even though this time we *did* attached an event handler. However, we handle the event entirely internally, and simply change to a static widget (`text`) in response. So from the perspective of the rest of the program, the widget never returns.
+
+#### Modifying DOM in response to Events
+
 What if we want to modify the original button, instead of replacing it entirely? Surely that would require having some sort of "architecture" or design pattern in place? As it happens to be, even in that case we don't need a separate workflow. Instead, we exploit a little trick of virtual dom, and replace the original button with a conceptually different button, and Concur takes care of updating the button efficiently instead of replacing it entirely.
 
 ```purescript
-helloWidget = do
+hello :: forall a. Widget HTML a
+hello = do
   button [onClick] [text "Say Hello"]
   button' [text "Hello Sailor!"]
 ```
@@ -104,7 +133,8 @@ helloWidget = do
 What if you wanted to do different things based on the user input itself. For example, you want to show a different greeting depending on which button was pressed.
 
 ```purescript
-helloWidget = do
+hello :: forall a. Widget HTML a
+hello = do
   greeting <- div'
     [ "Hello" <$ button [onClick] [text "Say Hello"]
     , "Namaste" <$ button [onClick] [text "Say Namaste"]
@@ -119,15 +149,18 @@ Everything works predictably, and using the tools you already have.
 I must mention that it's quite possible to compose widgets together without wrapping them in a div. Use the operator `<|>` to accomplish that. For example, composing two buttons directly -
 
 ```purescript
-button' [text "Ahoy Port!"]
-  <|>
-button' [text "Ahoy Starboard!"]
+hello :: forall a. Widget HTML a
+hello =
+  button' [text "Ahoy Port!"]
+    <|>
+  button' [text "Ahoy Starboard!"]
 ```
 
 You can also use `orr` which composes any number of widgets in a list.
 
 ```purescript
-orr
+hello :: forall a. Widget HTML a
+hello = orr
   [ button' [text "Ahoy Port!"]
   , button' [text "Ahoy Starboard!"]
   , button' [text "One more button!"]
@@ -144,6 +177,8 @@ Here's an example of an input element with both change and focus handlers.
 
 ```purescript
 data Action = Changed String | Focused
+
+inputWidget :: Widget HTML Action
 inputWidget = input [Changed <$> onChange, Focused <$ onFocus] []
 ```
 
@@ -153,7 +188,9 @@ You don't need an action data type if you decide to process the action in line. 
 
 ```purescript
 type State = {focusCount:: Int, currentText :: String}
-inputWidget = input [st {focusCount = st.focusCount+1} <$ onFocus, (\s -> st {currentText = s}) <$> onChange] []
+
+inputWidget :: State -> Widget HTML State
+inputWidget st = input [st {focusCount = st.focusCount+1} <$ onFocus, (\s -> st {currentText = s}) <$> onChange] []
 ```
 
 Now `inputWidget` will return the new application state whenever the text is changed or whenever it receives focus.
@@ -165,16 +202,17 @@ Concur provides seamless IO at widget boundaries. This is another area where oth
 Continuing our previous example, if we want to print to the console, the greeting selected by the user.
 
 ```purescript
+helloWidget :: forall a. Widget HTML a
 helloWidget = do
   greeting <- div'
     [ "Hello" <$ button [onClick] [text "Say Hello"]
     , "Namaste" <$ button [onClick] [text "Say Namaste"]
     ]
-  liftEff (log ("You chose to say " <> greeting))
+  liftEffect (log ("You chose to say " <> greeting))
   text (greeting <> " Sailor!")
 ```
 
-Here we use `liftEff` to convert an effect into a widget. Once purescript-0.12 support is merged, this will become `liftEffect`. In Haskell, we can use `liftIO`.
+Here we use `liftEffect` to convert an effect into a widget. In Haskell, we can use `liftIO`.
 
 This facility for seamless IO is very handy when creating bindings to existing native/JS libraries.
 
@@ -201,6 +239,7 @@ data FormAction
   | RememberMe Bool
   | Submit
 
+formWidget :: Form -> Widget HTML Form
 formWidget form = do
   -- This is like Elm's view function
   res <- div'
@@ -216,3 +255,16 @@ formWidget form = do
 ```
 
 Now you can use `formWidget` as a regular widget anywhere else in the rest of your application. Note that the other parts of your application don't need to know about `FormAction` at all.
+
+This is surprisingly powerful and composable. Let's build a widget which allows editing an arbitrary list of such forms. How many more lines of code are needed to accomplish that?
+
+The program is literally two words long i.e. `traverse formWidget`.
+
+```purescript
+multiFormWidget :: [Form] -> Widget HTML [Form]
+multiFormWidget = traverse formWidget
+```
+
+Here, we use the fact that `Widget` also has an `Applicative` instance (along with Functor and Monad instances) -
+
+Compare that with all the plumbing with Events, Actions, and State, that is needed for an equivalent Elm program.
