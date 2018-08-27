@@ -35,9 +35,9 @@ Look at the individual pages for [Concur (Haskell)](https://github.com/ajnsit/co
 
 #### A Widget
 
-Concur is built around composing `Widget`s. A Widgete is something that has a `View` i.e. a User-Interface, can change in response to some events, and finally return some value.
+Concur is built around composing `Widget`s. A Widget is something that has a `View` i.e. a User-Interface, can change in response to some events, and finally return some value.
 
-The type Widget is parameterised by the type of the View, and the return type.
+The type Widget is parameterised by the type of the View, and the return type. That is to say - a Concur Widget has the type `Widget HTML a`. Here `HTML` is the type of the view (i.e. client side apps), and `a` is the type parameter that denotes *what gets returned* when the Widget is *done*.
 
 ```purescript
 -- A Widget with a View of type HTML (i.e. client side web apps), and returning an Int
@@ -54,9 +54,12 @@ Here's a simple widget that displays a button with the text "Hello Sailor!" in C
 hello :: forall a. Widget HTML a
 hello = button' [text "Hello Sailor!"]
 ```
-Concur provides a very simple DSL for constructing HTML DOM elements. This widget is a button with some text inside it. Note that the return type of the widget is effectively `forall a. a` i.e. this widget never returns a value. This is distinct from a return value of `unit` (or `()` in Haskell) which denotes no **useful** value. 
 
-The complete type of the widget - `forall a. Widget HTML a` is also automatically inferred by the compiler, so need not be specified. The return type is inferred as `forall a. a` because we have not attached any event handlers to the widget, so any dom elements created are static and never end or change. More on this later.
+Concur provides a very simple DSL for constructing HTML DOM elements. This widget is a button with some text inside it.
+
+All Widgets in Concur have a *lifecycle*. But unlike the ad-hoc lifecycle in other frameworks, here the lifecycle is principled and reflected in the type. A widget that stops running after a while but doesn't return anything useful (e.g. a button) usually has the type `Unit` (or `()` in Haskell). A widget that displays something and never stops (e.g. a label) has the type `forall a. a` which is equivalent to `Void`, or the uninhabited type. Forever looping widgets will also usually have this type. The type itself shows clearly that nothing scheduled to be run after this widget will ever run.
+
+The type of this widget - `forall a. Widget HTML a` is also automatically inferred by the compiler, so need not be specified. The compiler knows that the return type of this widget is `forall a. a` because we have not attached any event handlers to the widget, so any dom elements created are static and never end or change.
 
 The resulting widget is self contained and can be easily populated on the page (within a div with the id "hello") -
 
@@ -64,7 +67,8 @@ The resulting widget is self contained and can be easily populated on the page (
 main = runWidgetInDom "hello" helloWidget
 ```
 
-#### Widget Composition
+#### Simply Composing Widgets
+
 
 Widgets can be easily laid out on the page using the HTML DSL. So you can create a layout with two buttons side by side like so -
 
@@ -94,11 +98,11 @@ Layout is **composition** *in space*. The two button widgets occupy different pa
 
 This leads to surprising power, since effectively, the return values *bubble* up the DOM tree, and you can then handle the return value at any level of granularity.
 
-We'll further discuss layout later in this guide.
+We'll further discuss layout, but first, we need to discuss event handling.
 
 #### Event Handling
 
-In the previous example, clicking the buttons does nothing. After all, we haven't attached an event handler to the button! Traditionally, responding to use input seems to be the place where complexity creeps into the application. In Elm, for example, this is the place where you would reach out for the *Elm Architecture*.
+In the previous examples, clicking the buttons does nothing. After all, we haven't attached an event handler to the button! Traditionally, responding to use input seems to be the place where complexity creeps into the application. In Elm, for example, this is the place where you would reach out for the *Elm Architecture*.
 
 Handling external events is where Concur shines. It does away with all the incidental complexity and lets you focus on the program logic. I'll make a claim that handling generic user events in Concur is simpler than any other library/framework in any programming language ever. If you know of anything else simpler, please let me know.
 
@@ -195,6 +199,73 @@ inputWidget st = input [st {focusCount = st.focusCount+1} <$ onFocus, (\s -> st 
 
 Now `inputWidget` will return the new application state whenever the text is changed or whenever it receives focus.
 
+#### Composing Widgets and Event Handling
+
+As previously mentioned, Concur Widgets compose seamlessly, in space, and in time, and the composition is dictated by the types of the Widgets. Let's discuss that further.
+
+The following widget will forever move between "Ping" and "Pong" buttons, and will never end. Hence it has the type `forall a. Widget HTML a`
+
+```purescript
+pingPong :: forall a. Widget HTML a
+pingPong = do
+  forever $ do
+    button [onClick] [text "Ping"]
+    button [onClick] [text "Pong"]
+  text "This text will never be shown"
+```
+
+Note that all widgets, which are either static, or entirely self contained and run forever, have the type `forall a. Widget HTML a`, which can be composed with any other widget. This means that they can be dropped into any part of the layout without affecting the types or the logic of the rest of the application. So if you have a button in the middle of the UI somewhere - `button [onClick] [text "Blah"]` - and you wanted to add a text label alongside, the combined widget `div_ [text "Click this button" , button [onClick] [text "Blah"]]` will be conceptually equal to the button on its own.
+
+Including a formal notion of a widget lifecycle, and a return type, has distinct advantages. For example, unlike other frameworks, the user never has to manually plumb events, state, and view updates together. So if you have a counter widget which returns an Integer -
+
+```purescript
+-- A counter widget takes the initial count as argument, and returns the updated count
+counter :: Int -> Widget HTML Int
+counter count = do
+  button [onClick] [text (show count)]
+  pure (count + 1)
+```
+
+You can compose an entire list of them easily on a webpage. The return value of the combined widget is the value of the first counter to return.
+
+```purescript
+-- Compose a list of counters in parallel
+-- The return value is the value of the counter which is clicked
+listCounters :: [Int] -> Widget HTML Int
+listCounter = orr <<< map counter
+```
+
+Now if we want to distinguish which counter was updated, we can use the `Functor` instance of Widgets to tag the return type. Widgets are also `Applicative` (and as we have already seen, `Monad`). These instances, allow a natural handling of return values using `<$>`, `<*>`, `<$`, monadic do-notation, etc. So we can now return the updated count tagged with the index of the Counter which was clicked -
+
+```purescript
+-- Compose a list of counters in parallel
+-- The return value is the value which was clicked together with its index.
+listCounters :: [Int] -> Widget HTML {count: Int, index: Int}
+listCounter initialCounts = orr (mapWithIndex mkCount initialCounts)
+  where mkCount index = map (\count -> {index, count}) <<< counter
+```
+
+See how we map over the widgets to modify the return value to a record with index.
+
+Or even better, you can simply return the modified counts together as a list, so the initial list of counts and the final list of counts have the same type.
+
+```purescript
+-- Compose a list of counters in parallel
+listCounters :: [Int] -> Widget HTML [Int]
+listCounter initialCounts = orr (mapWithIndex (mkCount initialCounts) initialCounts)
+  where mkCount initialCountArray index initCount = map (\count -> fromMaybe initialCountArray (updateAt index count initialCountArray)) (counter initCount)
+```
+
+It's also important to note, that the new list widget is still short and encapsulated within a single function (**As it really should be**).
+
+Of course, Concur also provides a better way to show multiple widgets in parallel and collect the output from each of them. It's called `andd` and it waits until all the reponses have been received (compare with `orr` which returns the first successful response). With `andd` you can simply write -
+
+```purescript
+-- Compose a list of counters in parallel
+listCounters :: [Int] -> Widget HTML [Int]
+listCounter initialCounts = andd (map counter initialCounts)
+```
+
 #### Input Output
 
 Concur provides seamless IO at widget boundaries. This is another area where other frameworks falter. Since concurrency is baked into and integral to Concur, IO becomes predictable and powerful. Concur provides lifting functions to lift IO into widgets, and those lifted io widgets can be easily composed just like any other normal widget.
@@ -256,7 +327,7 @@ formWidget form = do
 
 Now you can use `formWidget` as a regular widget anywhere else in the rest of your application. Note that the other parts of your application don't need to know about `FormAction` at all.
 
-This is surprisingly powerful and composable. Let's build a widget which allows editing an arbitrary list of such forms. How many more lines of code are needed to accomplish that?
+This is surprisingly powerful and composable. Let's build a widget which allows editing an arbitrary list of such forms in a sequence and then returns the list of modified forms. How many more lines of code are needed to accomplish that?
 
 The program is literally two words long i.e. `traverse formWidget`.
 
@@ -267,4 +338,11 @@ multiFormWidget = traverse formWidget
 
 Here, we use the fact that `Widget` also has an `Applicative` instance (along with Functor and Monad instances) -
 
-Compare that with all the plumbing with Events, Actions, and State, that is needed for an equivalent Elm program.
+If instead you wanted to allow editing all the forms together, you would do -
+
+```purescript
+multiFormWidget :: [Form] -> Widget HTML [Form]
+multiFormWidget = andd <<< map formWidget
+```
+
+Compare that with all the plumbing with Events, Actions, and State, that is needed for an equivalent *Elm* program. It would be even worse with something like *Reflex* because you would have to keep track of where you were in the list in the editing process, and also, what the values of the previously submitted forms are, and you would have to do that by composing events while manipulating the DOM (try it).
