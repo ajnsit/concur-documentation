@@ -287,7 +287,9 @@ Here we use `liftEffect` to convert an effect into a widget. In Haskell, we can 
 
 This facility for seamless IO is very handy when creating bindings to existing native/JS libraries.
 
-#### Replicating Elm Architecture
+## Architectural Notes
+
+### Replicating Elm Architecture
 
 Concur is strictly more powerful, while simultaneously being easier to use than Elm. We were able to compose widgets, handle events, and dynamically change the page contents without adopting an "architecture", or manually threading any state or action data structures.
 
@@ -346,3 +348,188 @@ multiFormWidget = andd <<< map formWidget
 ```
 
 Compare that with all the plumbing with Events, Actions, and State, that is needed for an equivalent *Elm* program. It would be even worse with something like *Reflex* because you would have to keep track of where you were in the list in the editing process, and also, what the values of the previously submitted forms are, and you would have to do that by composing events while manipulating the DOM (try it).
+
+### Plan for Composability by Breaking Down Components
+
+Concur has a very simple and consistent Widget model. However there are a few situations where the simplicity of the model leads you down the wrong path in terms of code organisation.
+
+The most common of such situations is when you have a specification for a widget, and you build it in a straightforward manner using Concur's monadic flow with a recursive call at the end. You don't need to create a data structure to represent the internal state of the widget.
+
+Taking the example of the greeting selector we built earlier -
+
+```purescript
+hello :: forall a. Widget HTML a
+hello = do
+  greeting <- div'
+    [ "Hello" <$ button [onClick] [text "Say Hello"]
+    , "Namaste" <$ button [onClick] [text "Say Namaste"]
+    ]
+  text (greeting <> " Sailor!") <|> button [onClick] [text "restart"]
+  hello
+```
+
+Note that the type of the widget is `forall a. Widget HTML a`. This means that the Widget is entirely self contained, which is a good thing for usability, but also bad in terms of composability. You are not able to combine this widget with other widgets in meaningful ways, and other widgets on the page cannot depend on the actual greeting selected.
+
+*The idiomatic and reusable Concur widget does one thing and returns a value*. So to make this reusable, we need to remove the recursive call at the end, and instead return the greeting selected.
+
+```purescript
+getGreeting :: Widget HTML String
+getGreeting = div'
+    [ "Hello" <$ button [onClick] [text "Say Hello"]
+    , "Namaste" <$ button [onClick] [text "Say Namaste"]
+    ]
+```
+
+And then having a separate widget which consumes that greeting, and allows the user to exit.
+
+```purescript
+showGreeting :: Widget HTML unit
+showGreeting greeting = div'
+  [ text (greeting <> " Sailor!")
+  , void $ button [onClick] [text "restart"]
+  ]
+```
+
+And then compose them together when needed.
+
+```purescript
+hello :: forall a. Widget HTML a
+hello = do
+  greeting <- getgreeting
+  showgreeting greeting
+  hello
+```
+
+Now the composition logic and the recursive call is isolated from the rest of the UI code, and can be easily changed if needed.
+
+For example, if the requirement changes to also always display the previously selected greeting, then you can do that without changing `getGreeting`, and `showGreeting`, and making only minimal changes to `hello`. We need to take the previous greeting as a parameter, and then loop on the new greeting when one has been selected.
+
+```purescript
+hello :: String -> forall a. Widget HTML a
+hello prev = hello =<< div'
+  [ text ("Previous greeting - " <> prev)
+  , do
+      greeting <- getgreeting
+      showgreeting greeting
+      pure greeting
+  ]
+
+helloWithPrev :: forall a. Widget HTML a
+helloWithPrev = hello ""
+```
+
+## Signals
+
+#### Introduction
+
+Signals are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
+
+To see why we need Signals, let's reconsider the greeting selector example from the previous section. We need to display a greeting selector, and then greet the user with that selected greeting, and finally allow the user to restart the cycle.
+
+The most straightforward way of writing this is directly in one go using monadic recursion -
+
+```purescript
+hello :: forall a. Widget HTML a
+hello = do
+  greeting <- div'
+    [ "Hello" <$ button [onClick] [text "Say Hello"]
+    , "Namaste" <$ button [onClick] [text "Say Namaste"]
+    ]
+  text (greeting <> " Sailor!") <|> button [onClick] [text "restart"]
+  hello
+```
+
+As we discussed in the previous section, to make this widget composable and maintainable, we should separate the recursive call from the rest of the code. However there are two things that are unsatisfactory about that -
+
+1. The most straightforward way to write something is not the idiomatic way to write something. We have lost a property that Concur prides itself on.
+2. The complete behaviour of the widget includes the UI *and* the recursion. It feels unsatisfactory to *have to*** separate the two in order to be able to compose things.
+
+**Enter Signals.**
+
+In essence, A Signal is a recursive / never ending widget which can still be composed seamlessly. Like a Widget, a Signal is also parameterised on the View, and the return value. A Signal is of type `Signal v a`, where `v` is the type of the view, and `a` is the return value. However, a signal does not "end" after returning a value, but is instead free to keep processing. Apart from being able to compose with other Signals, a Signal is conceptually equivalent to a never ending Widget `forall a. Widget HTML a`.
+
+So we have a function called `dyn` which can take a Signal and converts it to a never ending Widget so it can be displayed.
+
+```purescript
+dyn :: forall v a b. Signal v a -> Widget v b
+```
+
+Here we ignore the return value of the Widget, since we can't make use of it in Widget space, and return a widget with an indeterminate value `b`, i.e. the Widget is never ending.
+
+#### Your first Signal
+
+So how do we build signals? The workhorse for that is the function `hold`. It is dual to `dyn`, in that it allows creating a Signal from a Widget.
+
+```purescript
+hold :: forall v a. a -> Widget v (Signal v a) -> Signal v a
+```
+
+Each Signal always has a value associated with it. It's a `Comonad`, so the current value of the Signal can be extracted with `extract`.
+
+Hold takes the initial value of the signal as its first argument. The second argument is the Widget. This way of creating Signals requires recursion to be implemented in continuation passing style. The Widget passed in needs to perform some work, and then return the continuation Signal.
+
+Let's rewrite our hello example with Signals -
+
+```purescript
+hello :: String -> Signal HTML String
+hello s = hold s do
+  greeting <- div'
+    [ "Hello" <$ button [onClick] [text "Say Hello"]
+    , "Namaste" <$ button [onClick] [text "Say Namaste"]
+    ]
+  text (greeting <> " Sailor!") <|> button [onClick] [text "restart"]
+  pure (hello greeting)
+```
+
+It's almost the same as the straightforward Widget version! The only things that changed are that we had to specify the initial value of the greeting (by passing it as an argument to `hold`), and we had to change the explicit recursion to CPS by returning `hello` instead of directly calling `hello`.
+
+Now we can use it with `dyn` -
+
+```purescript
+helloWidget :: forall a. Widget HTML a
+helloWidget = dyn $ hello ""
+```
+
+#### Signal Composition
+
+Signals mimic traditional FRP by offering Monadic composition. It's always composition *in space* since Signals don't have a lifecycle, and run forever (until removed entirely from the page). That is to say that Signals don't have (or need) composition *n time*.
+
+Need to display a list of greeting widgets on the page at the same time?
+
+```purescript
+helloList :: Array String -> Signal HTML (Array String)
+helloList = traverse hello
+```
+
+The Signal will show all the individual widgets at the same time, and allow editing them at the same time. Note that we did not have to manage the recursion for individual signals when composing them.
+
+We can convert a simple display widget to a signal with `display`.
+
+```purescript
+display :: Widget HTML (Signal HTML Unit) -> Signal HTML Unit
+display = hold unit
+```
+
+What if we want to also display the currently selected greetings for all the hello widgets together at the top level?
+
+```purescript
+helloListWithDisplay :: Array String -> Signal HTML (Array String)
+helloListWithDisplay prev = div_ [] do
+  traverse hello prev
+  display (text ("Previously selected greetings - " <> show prev))
+```
+
+Note that we were able to use the same HTML DSL to wrap signals in DOM elements. `div_` is the same as `div`, but requires only a single child element.
+
+To understand how the composition works, think of monadic composition of signals like a waterfall. When you perform Signal `foo` and then Signal `bar`, both `foo` and `bar` are performed continuously. However every time, the upstream Signal `foo` emits a value, the value of downstream `bar` is recomputed.
+
+This leads to the question of layout. Signal views are displayed in the same order as the monadic composition. However, we might require a value from a later Signal to compute the value of an earlier signal. This is the classic problem with mixing monadic composition with layout, and is faced by all current FRP libraries. Concur Signals have a very simple solution for this - Loops.
+
+There is an operator called `loopS` provided which loops back the return value of a signal to the beginning. This is like `MonadFix` but less magical. So you can do this -
+
+```purescript
+helloListWithDisplay :: Signal HTML (Array String)
+helloListWithDisplay prev = loopS prev \prev' -> div_ [] do
+  display (text ("Previously selected greetings - " <> show prev'))
+  traverse hello prev'
+```
