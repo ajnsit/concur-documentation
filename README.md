@@ -102,11 +102,11 @@ We'll further discuss layout, but first, we need to discuss event handling.
 
 #### Event Handling
 
-In the previous examples, clicking the buttons does nothing. After all, we haven't attached an event handler to the button! Traditionally, responding to use input seems to be the place where complexity creeps into the application. In Elm, for example, this is the place where you would reach out for the *Elm Architecture*.
+In the previous examples, clicking the buttons does nothing. After all, we haven't attached an event handler to the button! Traditionally, responding to user input seems to be the place where complexity creeps into the application. In Elm, for example, this is the place where you would reach out for the *Elm Architecture*.
 
 Handling external events is where Concur shines. It does away with all the incidental complexity and lets you focus on the program logic. I'll make a claim that handling generic user events in Concur is simpler than any other library/framework in any programming language ever. If you know of anything else simpler, please let me know.
 
-In Concur, you can just attach tags to the widgets to indicate the events you wish to handle, and then handle them synchronously in the program flow. Concur takes care of all the plumbing and concurrency for you. This is part of where Concur's name comes from - its support for Concurrency. The other reason for Concur's name is due to what I call aliasing of types - where adjascent types and properties must agree (concur) before they can be composed, which leads to increased type safety and powerful composition primitives. We'll discuss concurrency and composition primitives later in this guide.
+In Concur, you can just attach tags to the widgets to indicate the events you wish to handle, and then handle them synchronously in the program flow. Concur takes care of all the plumbing and concurrency for you. This is part of where Concur's name comes from - its support for Concurrency. The other reason for Concur's name is due to what I call aliasing of types - where adjacent types and properties must agree (concur) before they can be composed, which leads to increased type safety and powerful composition primitives. We'll discuss concurrency and composition primitives later in this guide.
 
 Let's say we want to show a greeting to the user when the button is is clicked. We can do so very easily, by attaching an `onClick` attribute to the button. We have to use `button` instead of `button'`. (`button'` is defined simply as `button []` for convenience).
 
@@ -121,7 +121,7 @@ That's right, `text` is also a complete widget on its own, which we are composin
 
 The final effect is that we see a button with the text "Say Hello", which when clicked gets replaced by text "Hello Sailor!". Ain't that easy!
 
-Again, pay attention to the final type of the widget. It's the same as before (`forall a. Widget HTML a`) even though this time we *did* attached an event handler. However, we handle the event entirely internally, and simply change to a static widget (`text`) in response. So from the perspective of the rest of the program, the widget never returns.
+Again, pay attention to the final type of the widget. It's the same as before (`forall a. Widget HTML a`) even though this time we *did* attach an event handler. However, we handle the event entirely internally, and simply change to a static widget (`text`) in response. So from the perspective of the rest of the program, the widget never returns.
 
 #### Modifying DOM in response to Events
 
@@ -464,15 +464,15 @@ As we discussed in the previous section, to make this widget composable and main
 
 **Enter Signals.**
 
-In essence, A Signal is a recursive / never ending widget which can still be composed seamlessly. Like a Widget, a Signal is also parameterised on the View, and the return value. A Signal is of type `Signal v a`, where `v` is the type of the view, and `a` is the return value. However, a signal does not "end" after returning a value, but is instead free to keep processing. Apart from being able to compose with other Signals, a Signal is conceptually equivalent to a never ending Widget `forall a. Widget HTML a`.
+In essence, A Signal is a recursive / never ending widget which can still be composed seamlessly. Like a Widget, a Signal is also parameterised on the View, and the return value. A Signal is of type `Signal v a`, where `v` is the type of the view, and `a` is the return value. However, a signal does not "end" after returning a value, but is instead free to keep processing. Apart from being able to compose with other Signals, a Signal is conceptually equivalent to a never-ending Widget `forall a. Widget HTML a`.
 
-So we have a function called `dyn` which can take a Signal and converts it to a never ending Widget so it can be displayed.
+So we have a function called `dyn` which can take a Signal and converts it to a never-ending Widget so it can be displayed.
 
 ```purescript
 dyn :: forall v a b. Signal v a -> Widget v b
 ```
 
-Here we ignore the return value of the Widget, since we can't make use of it in Widget space, and return a widget with an indeterminate value `b`, i.e. the Widget is never ending.
+Here we ignore the return value of the Widget, since we can't make use of it in Widget space, and return a widget with an indeterminate value `b`, i.e. the Widget is never-ending.
 
 #### Your first Signal
 
@@ -510,7 +510,7 @@ helloWidget = dyn $ hello ""
 
 #### Signal Composition
 
-Signals mimic traditional FRP by offering Monadic composition. It's always composition *in space* since Signals don't have a lifecycle, and run forever (until removed entirely from the page). That is to say that Signals don't have (or need) composition *n time*.
+Signals mimic traditional FRP by offering Monadic composition. It's always composition *in space* since Signals don't have a lifecycle, and run forever (until removed entirely from the page). That is to say that Signals don't have (or need) composition *in time*.
 
 Need to display a list of greeting widgets on the page at the same time?
 
@@ -539,7 +539,7 @@ helloListWithDisplay prev = div_ [] do
 
 Note that we were able to use the same HTML DSL to wrap signals in DOM elements. `div_` is the same as `div`, but requires only a single child element.
 
-To understand how the composition works, think of monadic composition of signals like a waterfall. When you perform Signal `foo` and then Signal `bar`, both `foo` and `bar` are performed continuously. However every time, the upstream Signal `foo` emits a value, the value of downstream `bar` is recomputed.
+To understand how the composition works, think of monadic composition of signals like a waterfall. When you perform Signal `foo` and then Signal `bar`, both `foo` and `bar` are performed continuously. However, every time the upstream Signal `foo` emits a value, the value of downstream `bar` is recomputed.
 
 This leads to the question of layout. Signal views are displayed in the same order as the monadic composition. However, we might require a value from a later Signal to compute the value of an earlier signal. This is the classic problem with mixing monadic composition with layout, and is faced by all current FRP libraries. Concur Signals have a very simple solution for this - Loops.
 
