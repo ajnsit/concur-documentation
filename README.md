@@ -383,7 +383,7 @@ getGreeting = div'
 And then having a separate widget which consumes that greeting, and allows the user to exit.
 
 ```purescript
-showGreeting :: Widget HTML unit
+showGreeting :: String -> Widget HTML Unit
 showGreeting greeting = div'
   [ text (greeting <> " Sailor!")
   , void $ button [onClick] [text "restart"]
