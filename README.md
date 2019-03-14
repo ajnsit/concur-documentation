@@ -123,7 +123,7 @@ The final effect is that we see a button with the text "Say Hello", which when c
 
 Again, pay attention to the final type of the widget. It's the same as before (`forall a. Widget HTML a`) even though this time we *did* attach an event handler. However, we handle the event entirely internally, and simply change to a static widget (`text`) in response. So from the perspective of the rest of the program, the widget never returns.
 
-#### A digression on the type on a plain button widget
+#### A digression on the type of a plain button widget
 
 So what *is* the type when you don't handle the button click event internally? To be specific, what is the type of the following widget -
 
