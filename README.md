@@ -123,6 +123,58 @@ The final effect is that we see a button with the text "Say Hello", which when c
 
 Again, pay attention to the final type of the widget. It's the same as before (`forall a. Widget HTML a`) even though this time we *did* attach an event handler. However, we handle the event entirely internally, and simply change to a static widget (`text`) in response. So from the perspective of the rest of the program, the widget never returns.
 
+#### A digression on the type on a plain button widget
+
+So what *is* the type when you don't handle the button click event internally? To be specific, what is the type of the following widget -
+
+```purescript
+button [onClick] [text "Say Hello"]
+```
+
+The type is `Widget HTML SyntheticMouseEvent`, where the `SyntheticMouseEvent` is the type synonym for a record that basically maps a javascript mouse event.
+
+In Concur, the standard pattern is `Widget a = someDomElementWrapper [Prop a, Prop a, ...] [Widget a, Widget a,...]`. i.e. to get the return type of a Widget, you just need to look at the return type of any of the props passed to it, or the return type of any child widgets passed to it. In Concur, the types of the props, the children, and the parent widget itself must agree (or... concur, pun intended).
+
+So the return type of `button [onClick] [text "Say Hello"]` is necessarily the same as the return type of `onClick` which is defined in `Concur.React.Props`. Which you will find is `SyntheticMouseEvent`.
+
+If you try to check the type yourself in the purescript repl with :t, you would see the properties you can access on the event object -
+
+```
+> :t button [onClick] [text "Say Hello"]
+Widget (Array ReactElement)
+  (SyntheticEvent_
+     ( altKey :: Boolean
+     , button :: Number
+     , buttons :: Number
+     , clientX :: Number
+     , clientY :: Number
+     , ctrlKey :: Boolean
+     , getModifierState :: String -> Boolean
+     , metaKey :: Boolean
+     , pageX :: Number
+     , pageY :: Number
+     , relatedTarget :: NativeEventTarget
+     , screenX :: Number
+     , screenY :: Number
+     , shiftKey :: Boolean
+     , detail :: Number
+     , view :: NativeAbstractView
+     , bubbles :: Boolean
+     , cancelable :: Boolean
+     , currentTarget :: NativeEventTarget
+     , defaultPrevented :: Boolean
+     , eventPhase :: Number
+     , isTrusted :: Boolean
+     , nativeEvent :: NativeEvent
+     , target :: NativeEventTarget
+     , timeStamp :: Number
+     , type :: String
+     )
+  )
+```
+
+Here the `Array ReactElement` is the same as `HTML`, and everything after that is the mouse event.
+
 #### Modifying DOM in response to Events
 
 What if we want to modify the original button, instead of replacing it entirely? Surely that would require having some sort of "architecture" or design pattern in place? As it happens to be, even in that case we don't need a separate workflow. Instead, we exploit a little trick of virtual dom, and replace the original button with a conceptually different button, and Concur takes care of updating the button efficiently instead of replacing it entirely.
