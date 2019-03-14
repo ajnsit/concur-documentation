@@ -123,58 +123,6 @@ The final effect is that we see a button with the text "Say Hello", which when c
 
 Again, pay attention to the final type of the widget. It's the same as before (`forall a. Widget HTML a`) even though this time we *did* attach an event handler. However, we handle the event entirely internally, and simply change to a static widget (`text`) in response. So from the perspective of the rest of the program, the widget never returns.
 
-#### A digression on the type of a plain button widget
-
-So what *is* the type when you don't handle the button click event internally? To be specific, what is the type of the following widget -
-
-```purescript
-button [onClick] [text "Say Hello"]
-```
-
-The type is `Widget HTML SyntheticMouseEvent`, where the `SyntheticMouseEvent` is the type synonym for a record that basically maps a javascript mouse event.
-
-In Concur, the standard pattern is `Widget a = someDomElementWrapper [Prop a, Prop a, ...] [Widget a, Widget a,...]`. i.e. to get the return type of a Widget, you just need to look at the return type of any of the props passed to it, or the return type of any child widgets passed to it. In Concur, the types of the props, the children, and the parent widget itself must agree (or... concur, pun intended).
-
-So the return type of `button [onClick] [text "Say Hello"]` is necessarily the same as the return type of `onClick` which is defined in `Concur.React.Props`. Which you will find is `SyntheticMouseEvent`.
-
-If you try to check the type yourself in the purescript repl with :t, you would see the properties you can access on the event object -
-
-```
-> :t button [onClick] [text "Say Hello"]
-Widget (Array ReactElement)
-  (SyntheticEvent_
-     ( altKey :: Boolean
-     , button :: Number
-     , buttons :: Number
-     , clientX :: Number
-     , clientY :: Number
-     , ctrlKey :: Boolean
-     , getModifierState :: String -> Boolean
-     , metaKey :: Boolean
-     , pageX :: Number
-     , pageY :: Number
-     , relatedTarget :: NativeEventTarget
-     , screenX :: Number
-     , screenY :: Number
-     , shiftKey :: Boolean
-     , detail :: Number
-     , view :: NativeAbstractView
-     , bubbles :: Boolean
-     , cancelable :: Boolean
-     , currentTarget :: NativeEventTarget
-     , defaultPrevented :: Boolean
-     , eventPhase :: Number
-     , isTrusted :: Boolean
-     , nativeEvent :: NativeEvent
-     , target :: NativeEventTarget
-     , timeStamp :: Number
-     , type :: String
-     )
-  )
-```
-
-Here the `Array ReactElement` is the same as `HTML`, and everything after that is the mouse event.
-
 #### Modifying DOM in response to Events
 
 What if we want to modify the original button, instead of replacing it entirely? Surely that would require having some sort of "architecture" or design pattern in place? As it happens to be, even in that case we don't need a separate workflow. Instead, we exploit a little trick of virtual dom, and replace the original button with a conceptually different button, and Concur takes care of updating the button efficiently instead of replacing it entirely.
@@ -235,7 +183,7 @@ Here's an example of an input element with both change and focus handlers.
 data Action = Changed String | Focused
 
 inputWidget :: Widget HTML Action
-inputWidget = input [(Changed <<< unsafeTargetValue) <$> onChange, Focused <$ onFocus] []
+inputWidget = input [(Changed <<< unsafeTargetValue) <$> onChange, Focused <$ onFocus]
 ```
 (The `unsafeTargetValue` is equivalent to `event.target.value` in Javascript. It's literally defined as `(unsafeCoerce e).target.value`. It's "unsafe" because it can't statically guarantee that the onChange handler has been called on a target with a value. We are considering implementing a better more-typesafe API for getting the target value.)
 
@@ -247,7 +195,8 @@ You don't need an action data type if you decide to process the action in line. 
 type State = {focusCount:: Int, currentText :: String}
 
 inputWidget :: State -> Widget HTML State
-inputWidget st = input [st {focusCount = st.focusCount+1} <$ onFocus, ((\s -> st {currentText = s}) <<< unsafeTargetValue) <$> onChange] []
+inputWidget st = input [ st {focusCount = st.focusCount+1} <$ onFocus
+                       , ((\s -> st {currentText = s}) <<< unsafeTargetValue) <$> onChange]
 ```
 
 Now `inputWidget` will return the new application state whenever the text is changed or whenever it receives focus.
