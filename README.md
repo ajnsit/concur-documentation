@@ -343,7 +343,7 @@ Here we use `liftEffect` to convert an effect into a widget. In Haskell, we can 
 
 Lifting IO to Widgets means we can compose IO in parallel with other Widgets. This can lead to some nice patterns. Two examples -
 
-1. Allow cancelling long running IO actions in response to GUI events, without any boilerplate. Let's say we want to create a timer which can be cancelled. The following widget will return when the timer completes after a specified duration, or when the button is pressed, whichever is first. Whenver the button is pressed, the timer is thread is automatically cancelled so you don't have to do that manually.
+1. Allow cancelling long running IO actions in response to GUI events, without any boilerplate. Let's say we want to create a timer which can be cancelled. The following widget will return when the timer completes after a specified duration, or when the button is pressed, whichever is first. Whenver the button is pressed, the timer thread is automatically cancelled so you don't have to do that manually.
 
 ```purescript
 timerWidget ms = liftAff (delay (Milliseconds ms)) <|> button [unit <$ onClick] [text "Cancel"]
@@ -465,8 +465,8 @@ And then compose them together when needed.
 ```purescript
 hello :: forall a. Widget HTML a
 hello = do
-  greeting <- getgreeting
-  showgreeting greeting
+  greeting <- getGreeting
+  showGreeting greeting
   hello
 ```
 
@@ -479,8 +479,8 @@ hello :: String -> forall a. Widget HTML a
 hello prev = hello =<< div'
   [ text ("Previous greeting - " <> prev)
   , do
-      greeting <- getgreeting
-      showgreeting greeting
+      greeting <- getGreeting
+      showGreeting greeting
       pure greeting
   ]
 
@@ -490,7 +490,7 @@ helloWithPrev = hello ""
 
 ### Composing Never-ending Widgets
 
-As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See remoteWidget for an example)**.
+As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See [remoteWidget](https://pursuit.purescript.org/packages/purescript-concur-react/0.3.4/docs/Concur.Core.Patterns#v:remoteWidget) for an example)**.
 
 Composing never ending widgets works because parent widgets completely control the child widgets, and can remove them from the view at will irrespective of whether the widget ended.
 
@@ -510,7 +510,7 @@ app data = do
 
 #### Introduction
 
-Signals are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
+[Signal](https://pursuit.purescript.org/packages/purescript-concur-react/0.3.4/docs/Concur.Core.FRP#t:Signal)s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
 
 To see why we need Signals, let's reconsider the greeting selector example from the previous section. We need to display a greeting selector, and then greet the user with that selected greeting, and finally allow the user to restart the cycle.
 
@@ -530,7 +530,7 @@ hello = do
 As we discussed in the previous section, to make this widget composable and maintainable, we should separate the recursive call from the rest of the code. However there are two things that are unsatisfactory about that -
 
 1. The most straightforward way to write something is not the idiomatic way to write something. We have lost a property that Concur prides itself on.
-2. The complete behaviour of the widget includes the UI *and* the recursion. It feels unsatisfactory to *have to*** separate the two in order to be able to compose things.
+2. The complete behaviour of the widget includes the UI *and* the recursion. It feels unsatisfactory to *have to* separate the two in order to be able to compose things.
 
 **Enter Signals.**
 
@@ -549,10 +549,10 @@ Here we ignore the return value of the Widget, since we can't make use of it in 
 So how do we build signals? The workhorse for that is the function `hold`. It is dual to `dyn`, in that it allows creating a Signal from a Widget.
 
 ```purescript
-hold :: forall v a. a -> Widget v (Signal v a) -> Signal v a
+hold :: forall v a. Monoid v => a -> Widget v a -> Signal v a
 ```
 
-Each Signal always has a value associated with it. It's a `Comonad`, so the current value of the Signal can be extracted with `extract`.
+Each Signal always has a value associated with it. It's a [Comonad](https://pursuit.purescript.org/packages/purescript-control/4.1.0/docs/Control.Comonad#t:Comonad), so the current value of the Signal can be extracted with `extract`.
 
 Hold takes the initial value of the signal as its first argument. The second argument is the Widget. This way of creating Signals requires recursion to be implemented in continuation passing style. The Widget passed in needs to perform some work, and then return the continuation Signal.
 
