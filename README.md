@@ -57,7 +57,9 @@ hello = button' [text "Hello Sailor!"]
 
 Concur provides a very simple DSL for constructing HTML DOM elements. This widget is a button with some text inside it.
 
-All Widgets in Concur have a *lifecycle*. But unlike the ad-hoc lifecycle in other frameworks, here the lifecycle is principled and reflected in the type. A widget that stops running after a while but doesn't return anything useful (e.g. a button) usually has the type `Unit` (or `()` in Haskell). A widget that displays something and never stops (e.g. a label) has the type `forall a. a` which is equivalent to `Void`, or the uninhabited type. Forever looping widgets will also usually have this type. The type itself shows clearly that nothing scheduled to be run after this widget will ever run.
+#### Widget Return Types
+
+All Widgets in Concur have a *lifecycle*. But unlike the ad-hoc lifecycle in other frameworks, here the lifecycle is principled and reflected in the type. A widget that stops running after a while but doesn't return anything useful (e.g. a button) usually has the type `Unit` (or `()` in Haskell). A widget that displays something and never stops (e.g. a label) has the type `forall a. a` which is equivalent to `Void`, or the uninhabited type. Forever looping widgets will also usually have this type. The type itself shows clearly that nothing scheduled to be run after this widget will ever run. I like to call such widgets "Display Widgets". They are typically used to display static things like text. Because of their polymorphic return type, they can be passed to any function which requires a Widget of a particular return type, which comes in very handy.
 
 The type of this widget - `forall a. Widget HTML a` is also automatically inferred by the compiler, so need not be specified. The compiler knows that the return type of this widget is `forall a. a` because we have not attached any event handlers to the widget, so any dom elements created are static and never end or change.
 
@@ -576,6 +578,24 @@ helloWidget :: forall a. Widget HTML a
 helloWidget = dyn $ hello ""
 ```
 
+#### Converting Display Widgets
+
+Building Signals from "Display Widgets" i.e. never ending widgets is even easier. Here we can use a function called `display`. It's a convenience function provides the initial value for `hold` when its type has only one possible inhabitant (i.e. `Unit`). It is defined like this -
+
+```purescript
+display :: Widget HTML (Signal HTML Unit) -> Signal HTML Unit
+display = hold unit
+```
+
+Note that you don't need to worry about the initial value of the signal here. Never ending widgets have a polymorphic return type `forall a. a`, so they can be passed to `display` without issues (the polymorphic `a` is just resolved to a `Signal HTML Unit` by the type checker).
+
+An example of its usage -
+
+```purescript
+textSignal :: Signal HTML Unit
+textSignal = display (text "Hello Sailor!")
+```
+
 #### Signal Composition
 
 Signals mimic traditional FRP by offering Monadic composition. It's always composition *in space* since Signals don't have a lifecycle, and run forever (until removed entirely from the page). That is to say that Signals don't have (or need) composition *in time*.
@@ -588,13 +608,6 @@ helloList = traverse hello
 ```
 
 The Signal will show all the individual widgets at the same time, and allow editing them at the same time. Note that we did not have to manage the recursion for individual signals when composing them.
-
-We can convert a simple display widget to a signal with `display`.
-
-```purescript
-display :: Widget HTML (Signal HTML Unit) -> Signal HTML Unit
-display = hold unit
-```
 
 What if we want to also display the currently selected greetings for all the hello widgets together at the top level?
 
