@@ -365,7 +365,7 @@ Concur is strictly more powerful, while simultaneously being easier to use than 
 
 1. With Concur, there's no magic with effects and actions involved. A 'Widget' means a very simple thing - A section of UI which returns a value. Using this single concept, it's trivial to recreate the Elm architecture, but while remaining in full control, and understanding every step of the process.
 
-2. There is no global state, and you can use local state with as fine a granularity as desired. Moreover, the resulting widget can be used within other widgets without having to thread in its state manually. EVerything just works!
+2. There is no global state, and you can use local state with as fine a granularity as desired. Moreover, the resulting widget can be used within other widgets without having to thread in its state manually. Everything just works!
 
 Here's an example of building a small form with Concur -
 
