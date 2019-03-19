@@ -371,22 +371,22 @@ Here's an example of building a small form with Concur -
 -- This is like Elm's State
 type Form =
   { name :: String
-  , rememberMe :: Bool
+  , rememberMe :: Boolean
   }
 
 -- This is like Elm's Action
 data FormAction
   = Name String
-  | RememberMe Bool
+  | RememberMe Boolean
   | Submit
 
 formWidget :: Form -> Widget HTML Form
 formWidget form = do
   -- This is like Elm's view function
   res <- div'
-    [ Name <$> input [_type "text", value form.name, unsafeTargetValue <$> onChange] []
-    , RememberMe <$> input [_type "checkbox", checked form.rememberMe, onChecked] []
-    , Submit <$ button [value "Submit", onClick] []
+    [ Name <$> input [_type "text", value form.name, unsafeTargetValue <$> onChange]
+    , RememberMe (not form.rememberMe) <$ input [_type "checkbox", checked form.rememberMe, onChange]
+    , Submit <$ button [onClick] [text "Submit"]
     ]
   -- This is like Elm's update function
   case res of
@@ -395,7 +395,7 @@ formWidget form = do
     Submit -> pure form
 ```
 
-Now you can use `formWidget` as a regular widget anywhere else in the rest of your application. Note that the other parts of your application don't need to know about `FormAction` at all.
+Now you can use `formWidget` as a regular widget anywhere else in the rest of your application ([working example](https://github.com/ajnsit/purescript-concur/blob/master/examples/Test/TheElmArchitecture.purs)). Note that the other parts of your application don't need to know about `FormAction` at all.
 
 This is surprisingly powerful and composable. Let's build a widget which allows editing an arbitrary list of such forms in a sequence and then returns the list of modified forms. How many more lines of code are needed to accomplish that?
 
