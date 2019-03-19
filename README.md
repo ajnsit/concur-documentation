@@ -490,7 +490,7 @@ helloWithPrev = hello ""
 
 ### Composing Never-ending Widgets
 
-As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See [remoteWidget](https://pursuit.purescript.org/packages/purescript-concur-react/0.3.4/docs/Concur.Core.Patterns#v:remoteWidget) for an example)**.
+As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See [remoteWidget](https://pursuit.purescript.org/packages/purescript-concur-react/docs/Concur.Core.Patterns#v:remoteWidget) for an example)**.
 
 Composing never ending widgets works because parent widgets completely control the child widgets, and can remove them from the view at will irrespective of whether the widget ended.
 
@@ -510,7 +510,7 @@ app data = do
 
 #### Introduction
 
-[Signal](https://pursuit.purescript.org/packages/purescript-concur-react/0.3.4/docs/Concur.Core.FRP#t:Signal)s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
+[Signal](https://pursuit.purescript.org/packages/purescript-concur-react/docs/Concur.Core.FRP#t:Signal)s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
 
 To see why we need Signals, let's reconsider the greeting selector example from the previous section. We need to display a greeting selector, and then greet the user with that selected greeting, and finally allow the user to restart the cycle.
 
@@ -546,21 +546,21 @@ Here we ignore the return value of the Widget, since we can't make use of it in 
 
 #### Your first Signal
 
-So how do we build signals? The workhorse for that is the function `hold`. It is dual to `dyn`, in that it allows creating a Signal from a Widget.
+So how do we build signals? The workhorse for that is the function `step`. It is dual to `dyn`, in that it allows creating a Signal from a Widget.
 
 ```purescript
-hold :: forall v a. Monoid v => a -> Widget v a -> Signal v a
+step :: forall v a. a -> Widget v (Signal v a) -> Signal v a
 ```
 
-Each Signal always has a value associated with it. It's a [Comonad](https://pursuit.purescript.org/packages/purescript-control/4.1.0/docs/Control.Comonad#t:Comonad), so the current value of the Signal can be extracted with `extract`.
+Each Signal always has a value associated with it. It's a [Comonad](https://pursuit.purescript.org/packages/purescript-control/docs/Control.Comonad#t:Comonad), so the current value of the Signal can be extracted with `extract`.
 
-Hold takes the initial value of the signal as its first argument. The second argument is the Widget. This way of creating Signals requires recursion to be implemented in continuation passing style. The Widget passed in needs to perform some work, and then return the continuation Signal.
+Step takes the initial value of the signal as its first argument. The second argument is the Widget. This way of creating Signals requires recursion to be implemented in continuation passing style. The Widget passed in needs to perform some work, and then return the continuation Signal.
 
 Let's rewrite our hello example with Signals -
 
 ```purescript
 hello :: String -> Signal HTML String
-hello s = hold s do
+hello s = step s do
   greeting <- div'
     [ "Hello" <$ button [onClick] [text "Say Hello"]
     , "Namaste" <$ button [onClick] [text "Say Namaste"]
@@ -569,7 +569,7 @@ hello s = hold s do
   pure (hello greeting)
 ```
 
-It's almost the same as the straightforward Widget version! The only things that changed are that we had to specify the initial value of the greeting (by passing it as an argument to `hold`), and we had to change the explicit recursion to CPS by returning `hello` instead of directly calling `hello`.
+It's almost the same as the straightforward Widget version! The only things that changed are that we had to specify the initial value of the greeting (by passing it as an argument to `step`), and we had to change the explicit recursion to CPS by returning `hello` instead of directly calling `hello`.
 
 Now we can use it with `dyn` -
 
@@ -580,11 +580,11 @@ helloWidget = dyn $ hello ""
 
 #### Converting Display Widgets
 
-Building Signals from "Display Widgets" i.e. never ending widgets is even easier. Here we can use a function called `display`. It's a convenience function provides the initial value for `hold` when its type has only one possible inhabitant (i.e. `Unit`). It is defined like this -
+Building Signals from "Display Widgets" i.e. never ending widgets is even easier. Here we can use a function called `display`. It's a convenience function provides the initial value for `step` when its type has only one possible inhabitant (i.e. `Unit`). It is defined like this -
 
 ```purescript
 display :: Widget HTML (Signal HTML Unit) -> Signal HTML Unit
-display = hold unit
+display = step unit
 ```
 
 Note that you don't need to worry about the initial value of the signal here. Never ending widgets have a polymorphic return type `forall a. a`, so they can be passed to `display` without issues (the polymorphic `a` is just resolved to a `Signal HTML Unit` by the type checker).
