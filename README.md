@@ -23,7 +23,7 @@
 
 3. For professional development - Concur scales linearly with program complexity. Simple things are easy, complex things are just as complex as the problem itself, no more. Reusing existing widgets, and refactoring existing code is extremely easy. Concur is a great choice to build your next enterprise application on.
 
-4. Multiplatform development - Concur works with Haskell and Purescript. It provides a React backend, and a virtual-dom backend, with other native backends in the works. It provides great support for integrating existing React widgets. Note that Concur code in all those platforms looks (or will look) exactly the same!
+4. Multiplatform development - Concur works with Haskell and Purescript. It provides a React backend, and a virtual-dom backend. With Haskell it also supports server-side virtual-dom with [Replica](https://github.com/concurhaskell/concur-replica). There are other native backends in the works. It provides great support for integrating existing React widgets. Note that Concur code in all those platforms looks (or will look) exactly the same!
 
 Throughout this tutorial, please keep in mind that Concur does not hide any functionality from you. What you see in the code *is* exactly what is happening. There is never any *magical* plumbing that takes place in the background which you don't directly control. So if a piece of code is not immediately and independently understandable, then please point it out and I will try to make it clearer.
 
