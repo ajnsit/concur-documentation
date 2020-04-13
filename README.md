@@ -716,3 +716,211 @@ s = g <$> innerSignal
 ```
 
 Not pretty, but usually you won't have such complicated state and dependencies.
+
+## FAQ
+
+Taken from my answer to a question at https://github.com/jviide/flowponent/issues/2
+
+### Qs. Why the Concur model?
+
+Not a negative sentiment, but legitimately curious.
+
+I checked out the Concur repos and docs + samples to try to get a better understanding of this, but at first-glance it seems like additional complexity that could be handled with plain logical statements in the render method?
+
+If it is not too much trouble, could you explain a bit why using this type of flow is different or better than having a view that gets injected with stateful data and re-renders normally?
+
+### Ans.
+
+The answer I usually give for Concur is that this flow based paradigm is simpler *and* scales better to larger programs. This is usually because our mental model fits synchronous control flow, and free composition of widgets better.
+
+### It's really simple for simple real world code
+
+Think of when a person first learns to program, and writes something beyond plain hello world, which was output only, to something that is interactive.
+
+Say, accept a user's name and then say hello to them. They probably would intuitively write something like this, assuming appropriate `getInput` and `log` functions -
+
+```purescript
+name <- getInput "What is your name"
+log "Hello "+name
+```
+
+This is simple, and works. Hey programming is easy!
+
+But as soon as they start thinking of even slightly larger programs, they have to change their mental model completely. They have to deal with asynchronous behaviour (event handlers), and different input/output modes (interacting with the DOM instead of alert/prompt), and code architecture issues (how do you build a larger program from a smaller one without rewriting completely).
+
+Imagine if writing a simple hello world involved something like this from the get go (In javascript now) -
+
+```javascript
+setInitialState({name: null})
+onRender() {
+  let {name} = getState()
+  if(name == null) {
+    prompt("What is your name",
+      userInput => setState({name: userInput})
+    )
+  } else {
+    alert("Hello "+name)
+  }
+}
+```
+
+It's pretty crummy and hard to understand for new programmers, and hides the actual logic behind a lot of cruft.
+
+Concur/Flowponent lets you have the original easy model or programming, without losing anything.
+
+```purescript
+name <- textInputEnter "What is your name?" true []
+D.text $ "Hello " + name
+```
+
+This code is asynchronous with event handlers, and can output to the dom (`textInputEnter` and `D.div` are a part of Purescript-Concur-React).
+
+Also the logic doesn't rely on a magic `render` method which is called automatically just when you need it to be called (i.e. state changes). Instead, the rendering is explicitly controlled by the program (even if behind the scenes it uses the original render method). I feel it greatly improves comprehension.
+
+**AND it scales linearly with program complexity.**
+
+Take a very simple extension to the previous program. Think about how the code could be modified to handle a list of users. All of them need to be asked their names and greeted. A new programmer would probably think that it would look something like this (In Javascript) -
+
+```javascript
+for(user of users) {
+  let name = prompt("What is your name")
+  alert("Hello "+name)
+}
+```
+
+It's simple, it's clear, and if it worked it would have had no bugs.
+
+But no. We can't actually write it like that. It takes a great mental leap to get to the state based async model for this functionality.
+
+And because there is so much cruft, there are lots of ways to write this cruft. There isn't one good canonical way. Eventually you have to write something like this. It may have bugs since I just wrote it inline just now (Again in Javascript) -
+
+```javascript
+// Don't modify the original users array. Assumes a clone method.
+setInitialState({usersLeft: users.clone(), name:null})
+onRender() {
+  let {usersLeft, name} = getState()
+  if(name != null) {
+    alert("Hello "+name)
+  }
+  // No else
+  let user = usersLeft.pop()
+  if(user != undefined) {
+    prompt("What is your name",
+      // Don't forget to set the modified users array
+      userInput => setState({usersLeft: usersLeft, name: userInput})
+    )
+  }
+}
+```
+
+Whereas, Concur lets you keep the simple model with no drawbacks. -
+
+In Purescript this is simply -
+
+```purescript
+sequence $ repeat 10 $ do
+  name <- textInputEnter "What is your name?" true []
+  D.text $ "Hello " + name
+```
+
+And even in Javscript it's easy (Using a strange list syntax here because I didn't want to use DOM elements, but hopefully the concept is clear) -
+
+```javascript
+name = null
+for(user of users) {
+  name = yield step =>
+     [ if(name != null) alert("Hello "+name)
+     , prompt("What is your name", step)
+    ]
+}
+```
+
+Looks like programming IS really easy!
+
+### Qs. Jumping into the middle of widget?
+
+Taken from my answer to a question at https://github.com/jviide/flowponent/issues/2
+
+One downside that may be observed in practice in that generators can’t be jumped into.
+
+e.g for testing a particular state in a test, need to go through the previous parts of the functions to get there. Or for hot-module-reloading with fast dev reloads. The components can’t be re-hydrated from a previous state.
+
+Though this is purely speculative, certainly not a reason to avoid this approach as the benefits do look good 🙂
+
+### Ans.
+
+**(All code snippets in this answer are in Javascript).**
+
+Hmm, I think you'd find that the flow model is pretty flexible. In particular, it's strictly more powerful than React/Redux/Elm.
+
+#### For example, you can simply define your own redux in 3 lines -
+
+```javascript
+function redux(state, render, update) {
+  let action = yield* render(state)
+  let newState = update(state, action)
+  yield* redux(newState, render, update)
+}
+```
+
+Then you can use it in the usual stateful way! Everything below is business logic -
+
+```javascript
+// Initial state (the name of the person)
+// To hydrate, you only need to restore this state
+let state = null
+
+// Define a render function
+// Allow the user to change the name to John
+let render = name => step =>
+     [ if(name != null) alert("Hello "+name)
+     , prompt("Should I call you John instead?", step)
+    ]
+
+// Update function
+// Change the state (name) to John if the user requested it
+let update = response => name =>
+  response=="yes"? "john" : name
+
+// Wire everything together!
+redux(name, render, update);
+```
+
+#### You can also use checkpoints to store the implicit "state".
+
+A checkpoint is defined as a specific series of return values encountered in a widget.
+
+Define a generic `checkpoint` function that can be used in place of `yield`.
+
+```javascript
+// This is our implicit state
+// To hydrate, you only need to restore this state
+let checkpoints = []
+// How much state has been restored?
+let checkpointIndex = 0
+
+// Yield with checkpointing
+function checkpoint(view) {
+  let ret = checkpoints[checkpointIndex]
+  if(ret !== null) {
+    checkpointIndex++
+    return ret
+  }
+  
+  let ret = yield view
+  checkpoints.push(ret)
+  return ret
+}
+```
+
+Now write code normally, and you have checkpointing! For example, the users array code from earlier -
+
+```javascript
+name = null
+for(user of users) {
+  name = yield* checkpoint(step =>
+     [ if(name != null) alert("Hello "+name)
+     , prompt("What is your name", step)
+    ])
+}
+```
