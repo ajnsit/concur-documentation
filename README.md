@@ -117,7 +117,7 @@ Let's say we want to show a greeting to the user when the button is is clicked. 
 ```purescript
 hello :: forall a. Widget HTML a
 hello = do
-  button [onClick] [text "Say Hello"]
+  void $ button [onClick] [text "Say Hello"]
   text "Hello Sailor!"
 ```
 
@@ -186,7 +186,7 @@ What if we want to modify the original button, instead of replacing it entirely?
 ```purescript
 hello :: forall a. Widget HTML a
 hello = do
-  button [onClick] [text "Say Hello"]
+  void $ button [onClick] [text "Say Hello"]
   button' [text "Hello Sailor!"]
 ```
 
@@ -440,7 +440,7 @@ hello = do
   hello
 ```
 
-Note that the type of the widget is `forall a. Widget HTML a`. This means that the Widget is entirely self contained, which is a good thing for usability, but also bad in terms of composability. You are not able to combine this widget with other widgets in meaningful ways, and other widgets on the page cannot depend on the actual greeting selected. **Note: Actually, it often makes sense to compose never-ending widgets. Look at the next section on "Never-ending Components to see how.** 
+Note that the type of the widget is `forall a. Widget HTML a`. This means that the Widget is entirely self contained, which is a good thing for usability, but also bad in terms of composability. You are not able to combine this widget with other widgets in meaningful ways, and other widgets on the page cannot depend on the actual greeting selected. **Note: Actually, it often makes sense to compose never-ending widgets. Look at the next section on "Never-ending Components to see how.**
 
 *The idiomatic and reusable Concur widget does one thing and returns a value*. So to make this reusable, we need to remove the recursive call at the end, and instead return the greeting selected.
 
