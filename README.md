@@ -635,7 +635,7 @@ helloListWithDisplay prev = loopS prev \prev' -> div_ [] do
   traverse hello prev'
 ```
 
-## An example
+### An example
 
 Here's an example of using Signals to implement a counter widget where the count is also automatically incremented every second -
 
@@ -688,7 +688,7 @@ do
 
 4. A slight complication occurs when a signal depends on the value of a **downstream** signal, we need to use the `loopS` combinator which "loops" the value of the last signal back up to the top so that the upstream signals can use it. Note that you would need the last signal to carry **all** the values that are needed by the upstream signals.
 
-Usually you would have some sort of a state that is accessible to all the constituent signals, and loop over that state. In the counter+timer example in my previous comment, the current value of the timer as well as the counter depended on the current count. So we need to loop that over.
+Usually you would have some sort of a state that is accessible to all the constituent signals, and loop over that state. In the counter+timer example, the timer and the counter both depended on the current count. So we need to loop the current count over.
 
 5. Note that sometimes this changes the final return value of the signal away from what you want. So you may need to `map` the final composition function on top of the signal value.
 
