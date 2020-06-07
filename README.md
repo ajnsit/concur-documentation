@@ -399,7 +399,7 @@ formWidget form = do
     Submit -> pure form
 ```
 
-Now you can use `formWidget` as a regular widget anywhere else in the rest of your application ([working example](https://github.com/ajnsit/purescript-concur/blob/master/examples/Test/TheElmArchitecture.purs)). Note that the other parts of your application don't need to know about `FormAction` at all.
+Now you can use `formWidget` as a regular widget anywhere else in the rest of your application ([working example](https://github.com/purescript-concur/purescript-concur-react/blob/master/examples/src/Test/TheElmArchitecture.purs)). Note that the other parts of your application don't need to know about `FormAction` at all.
 
 This is surprisingly powerful and composable. Let's build a widget which allows editing an arbitrary list of such forms in a sequence and then returns the list of modified forms. How many more lines of code are needed to accomplish that?
 
@@ -492,7 +492,7 @@ helloWithPrev = hello ""
 
 ### Composing Never-ending Widgets
 
-As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See [remoteWidget](https://pursuit.purescript.org/packages/purescript-concur-react/docs/Concur.Core.Patterns#v:remoteWidget) for an example)**.
+As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See [remoteWidget](https://pursuit.purescript.org/packages/purescript-concur-core/docs/Concur.Core.Patterns#v:remoteWidget) for an example)**.
 
 Composing never ending widgets works because parent widgets completely control the child widgets, and can remove them from the view at will irrespective of whether the widget ended.
 
@@ -512,7 +512,7 @@ app data = do
 
 #### Introduction
 
-[Signal](https://pursuit.purescript.org/packages/purescript-concur-react/docs/Concur.Core.FRP#t:Signal)s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
+[Signal](https://pursuit.purescript.org/packages/purescript-concur-core/docs/Concur.Core.FRP#t:Signal)s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
 
 To see why we need Signals, let's reconsider the greeting selector example from the previous section. We need to display a greeting selector, and then greet the user with that selected greeting, and finally allow the user to restart the cycle.
 
@@ -906,7 +906,7 @@ function checkpoint(view) {
     checkpointIndex++
     return ret
   }
-  
+
   let ret = yield view
   checkpoints.push(ret)
   return ret
