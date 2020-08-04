@@ -68,7 +68,7 @@ The type of this widget - `forall a. Widget HTML a` is also automatically inferr
 The resulting widget is self contained and can be easily populated on the page (within a div with the id "hello") -
 
 ```purescript
-main = runWidgetInDom "hello" helloWidget
+main = runWidgetInDom "hello" hello
 ```
 
 #### Simply Composing Widgets
