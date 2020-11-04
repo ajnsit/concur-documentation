@@ -27,6 +27,10 @@
 
 Throughout this tutorial, please keep in mind that Concur does not hide any functionality from you. What you see in the code *is* exactly what is happening. There is never any *magical* plumbing that takes place in the background which you don't directly control. So if a piece of code is not immediately and independently understandable, then please point it out and I will try to make it clearer.
 
+## Other Resources
+
+The [Awesome Concur](https://github.com/purescript-concur/awesome-concur) repo collects libraries, documentation, and other awesome things related to the Concur ecosystem.
+
 ## Installation
 
 Look at the individual pages for [Concur (Haskell)](https://github.com/ajnsit/concur), or [Purescript-Concur](https://github.com/ajnsit/purescript-concur) for installation instructions.
