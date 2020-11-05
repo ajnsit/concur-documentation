@@ -1,0 +1,11 @@
+[book]
+authors = ["Anupam Jain"]
+language = "en"
+multilingual = false
+src = "src"
+title = "The Concur UI Framework"
+
+[output.html]
+additional-css = ["ferris.css", "theme/2020-edition.css"]
+additional-js = ["ferris.js"]
+git-repository-url = "https://github.com/ajnsit/concur-documentation"

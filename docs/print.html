@@ -1,0 +1,969 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Concur UI Framework</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="ferris.css">
+        
+        <link rel="stylesheet" href="theme/2020-edition.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Concur UI Framework</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-first-concur-program.html"><strong aria-hidden="true">1.2.</strong> Your first Concur program!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-quick-tour.html"><strong aria-hidden="true">2.</strong> A Quick Tour of Concur</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch02-01-anatomy-of-a-widget.html"><strong aria-hidden="true">2.1.</strong> Anatomy of a Widget</a></li><li class="chapter-item expanded "><a href="ch02-02-widget-return-types.html"><strong aria-hidden="true">2.2.</strong> Widget Return Types</a></li><li class="chapter-item expanded "><a href="ch02-03-composing-widgets.html"><strong aria-hidden="true">2.3.</strong> Composing Widgets</a></li><li class="chapter-item expanded "><a href="ch02-04-event-handling.html"><strong aria-hidden="true">2.4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="ch02-05-modifying-dom-on-events.html"><strong aria-hidden="true">2.5.</strong> Modifying DOM on Events</a></li><li class="chapter-item expanded "><a href="ch02-06-handling-multiple-events.html"><strong aria-hidden="true">2.6.</strong> Handling Multiple Events</a></li><li class="chapter-item expanded "><a href="ch02-07-composing-widgets-with-events.html"><strong aria-hidden="true">2.7.</strong> Composing Widgets with Events</a></li><li class="chapter-item expanded "><a href="ch02-08-input-output.html"><strong aria-hidden="true">2.8.</strong> Input Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch03-00-architectural-notes.html"><strong aria-hidden="true">3.</strong> Architectural Notes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-replicating-elm-architecture.html"><strong aria-hidden="true">3.1.</strong> Replicating Elm Architecture</a></li><li class="chapter-item expanded "><a href="ch03-02-plan-for-composability-by-breaking-down-components.html"><strong aria-hidden="true">3.2.</strong> Plan for Composability by Breaking Down Components</a></li><li class="chapter-item expanded "><a href="ch03-03-composing-never-ending-widgets.html"><strong aria-hidden="true">3.3.</strong> Composing Never Ending Widgets</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-introduction-to-signals.html"><strong aria-hidden="true">4.1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ch04-02-your-first-signal.html"><strong aria-hidden="true">4.2.</strong> Your First Signal</a></li><li class="chapter-item expanded "><a href="ch04-03-introduction-to-signals.html"><strong aria-hidden="true">4.3.</strong> Converting Display Widgets</a></li><li class="chapter-item expanded "><a href="ch04-04-signal-composition.html"><strong aria-hidden="true">4.4.</strong> Signal Composition</a></li><li class="chapter-item expanded "><a href="ch04-05-signal-example.html"><strong aria-hidden="true">4.5.</strong> Signal Example</a></li><li class="chapter-item expanded "><a href="ch04-06-some-notes-on-signal-usage.html"><strong aria-hidden="true">4.6.</strong> Some Notes on Signal Usage</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-faqs.html"><strong aria-hidden="true">5.</strong> FAQs</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-why-concur.html"><strong aria-hidden="true">5.1.</strong> Why the Concur Model</a></li><li class="chapter-item expanded "><a href="ch05-02-jumping-into-the-middle-of-widgets.html"><strong aria-hidden="true">5.2.</strong> Jumping Into the Middle of Widgets</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">The Concur UI Framework</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/ajnsit/concur-documentation" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#the-concur-ui-framework-documentation" id="the-concur-ui-framework-documentation">The Concur UI Framework Documentation</a></h1>
+<p><em>by Anupam Jain</em></p>
+<p>This &quot;book&quot; was created by splitting the Concur tutorial into multiple chapters
+and rendering everything with <a href="https://github.com/rust-lang/mdBook">mdbook</a>.</p>
+<p>The book is currently available online in <a href="https://ajnsit.github.io/concur-documentation">HTML format</a>.</p>
+<p>To build this book yourself, you can run <code>mdbook build</code> from the root directory
+of the <a href="https://github.com/ajnsit/concur-documentation">source repository of this book</a>.</p>
+<p>Community contributions are welcome!</p>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p><strong>Concur</strong> is a UI development framework for functional languages like Haskell and Purescript. It is primarily used for client side web development, but there are efforts underway to port it to other platforms such as those for native desktop and mobile applications.</p>
+<ol>
+<li>
+<p>For learners - Concur focuses on <strong>ease of development without sacrificing power</strong>. Simplicity is the number one goal. Concur provides a consistent set of tools which can be combined in predictable ways to accomplish any level of functionality ranging from the simplest hello world example to the most complex frontend for a web app. Due to its extremely gentle learning curve, Concur is well suited for learners of functional programming (replacing console applications for learners).</p>
+</li>
+<li>
+<p>For experienced folks - Assuming you are already familiar with functional programming, Concur will provide a satisfying development experience. Concur does not artificially constrain you in any form. You are encouraged to use your FP bag of tricks in predictable ways, and that is the standard way of doing things so you are never going against the grain. It's a <em>library</em> in spirit, rather than a framework.</p>
+</li>
+<li>
+<p>For professional development - Concur scales linearly with program complexity. Simple things are easy, complex things are just as complex as the problem itself, no more. Reusing existing widgets, and refactoring existing code is extremely easy. Concur is a great choice to build your next enterprise application on.</p>
+</li>
+<li>
+<p>Multiplatform development - Concur works with Haskell and Purescript. It provides a <a href="https://reactjs.org/">React</a> backend, and a virtual-dom backend. With Haskell it also supports server-side virtual-dom with <a href="https://github.com/concurhaskell/concur-replica">Replica</a>. There are other native backends in the works. It provides great support for integrating existing React widgets. Note that Concur code in all those platforms looks (or will look) exactly the same!</p>
+</li>
+</ol>
+<h2><a class="header" href="#note-about-the-code-samples--" id="note-about-the-code-samples--">Note about the code samples -</a></h2>
+<p>Throughout this tutorial, please keep in mind that Concur does not hide any functionality from you.
+What you see in the code <em>is</em> exactly what is happening. There is never any <em>magical</em> plumbing that
+takes place in the background which you don't directly control. So if a piece of code is not
+immediately and independently understandable, then please point it out and I will try to make
+it clearer.</p>
+<blockquote>
+<p>This book is written to be backend and language neutral. These concepts will also apply whether you are
+using the Haskell version or the Purescript version, and to some extent even JS and python versions.
+However to simplify things, all the code examples will be in Purescript, using the React backend.</p>
+</blockquote>
+<h1><a class="header" href="#getting-started" id="getting-started">Getting Started</a></h1>
+<p>Let’s start your Concur journey! There’s a lot to learn, but every journey starts
+somewhere. In this chapter, we’ll discuss:</p>
+<ul>
+<li>Getting Concur for Haskell, Purescript, or other platforms</li>
+<li>Writing your first Concur program!</li>
+</ul>
+<h1><a class="header" href="#installation" id="installation">Installation</a></h1>
+<h2><a class="header" href="#concur-haskell" id="concur-haskell">Concur Haskell</a></h2>
+<p>It has three backends -</p>
+<ol>
+<li>
+<p><a href="https://github.com/facebook/react">React</a> based, called <a href="concur-react">concur-react</a>. You can use the <a href="https://github.com/concurhaskell/concur-react-starter">Concur-React Quickstart Template</a> to quickly get started.</p>
+<p>An example of using Native React Widgets is here - <a href="https://github.com/concurhaskell/concur-react-sortable-tree/blob/master/src/Main.hs">Drag Drop Sortable List Widget (React)</a> - <a href="https://ajnsit.github.io/concur/examples/sortable-tree-example.jsexe/index.html">Demo</a> - Demonstrates Concur binding to <a href="https://github.com/fritz-c/react-sortable-tree">React-Sortable-Tree</a>.</p>
+</li>
+<li>
+<p><a href="https://github.com/Matt-Esch/virtual-dom">Virtual-Dom</a> based, called <a href="concur-vdom">concur-vdom</a>. (<strong>Bitrotten</strong>). You can use the <a href="https://github.com/concurhaskell/concur-vdom-starter">Concur-Vdom Quickstart Template</a> to quickly get started.</p>
+</li>
+<li>
+<p><a href="https://github.com/pkamenarsky/replica">Replica</a> (i.e. remote virtual-dom) based, called <a href="https://github.com/pkamenarsky/concur-replica">concur-replica</a>. Created and maintained by <a href="https://github.com/pkamenarsky">pkamenarsky</a>. Head to its <a href="https://github.com/pkamenarsky/concur-replica">project page</a> for more information.</p>
+</li>
+</ol>
+<h2><a class="header" href="#concur-purescript" id="concur-purescript">Concur Purescript</a></h2>
+<p>You can quickly get a production setup going (using Spago and Parcel) by cloning the <a href="https://github.com/purescript-concur/purescript-concur-starter">Purescript Concur Starter</a>.</p>
+<p>Else, if you use Spago -</p>
+<pre><code class="language-bash">spago install concur-react
+</code></pre>
+<p>Or if you use Bower -</p>
+<pre><code class="language-bash">bower install purescript-concur-react
+</code></pre>
+<h2><a class="header" href="#building-examples-from-source" id="building-examples-from-source">Building examples from source</a></h2>
+<pre><code class="language-bash">git clone https://github.com/purescript-concur/purescript-concur-react.git
+cd purescript-concur-react
+npm install
+# Build library sources
+npm run build
+# Build examples
+npm run examples
+# Start a local server
+npm run start
+# Check examples
+open localhost:1234 in the browser
+</code></pre>
+<h2><a class="header" href="#more-help" id="more-help">More Help</a></h2>
+<p>Look at the individual pages for <a href="https://github.com/ajnsit/concur">Concur (Haskell)</a>, or <a href="concurps">Purescript-Concur</a> for further instructions.</p>
+<h1><a class="header" href="#your-first-concur-program" id="your-first-concur-program">Your First Concur Program</a></h1>
+<p>Now that you’ve setup Concur, let’s write your first Concur program!</p>
+<h2><a class="header" href="#hello-sailor" id="hello-sailor">Hello Sailor</a></h2>
+<p>It's traditional in the Purescript world, when learning a new framework, to write a little
+program that shows the text <code>Hello, sailor!</code> to the screen, so we’ll do the same here!</p>
+<p>Here's a simple widget (named hello) that displays the text &quot;Hello Sailor!&quot; -</p>
+<pre><code class="language-purescript">hello = text &quot;Hello Sailor!&quot;
+</code></pre>
+<p>Concur provides a very simple DSL for constructing HTML DOM elements. <code>text</code> is a function that takes a <code>string</code> and constructs a widget with that text inside it.</p>
+<p>I hope that there is nothing mysterious about this program. Concur has a mantra - &quot;Make easy things easy, and complex things only as complex as the problem itself&quot;. For a simple UI like this, the program is suitably simple.</p>
+<h2><a class="header" href="#counter-example" id="counter-example">Counter Example</a></h2>
+<p>It's also traditional, when learning a UI framework, to demonstrate a program that can count up.
+Here, we built such a counter program in Concur.</p>
+<pre><code class="language-purescript">counter count = do
+  button [onClick] [text (show count)]
+  counter (count + 1)
+</code></pre>
+<p>Here we define a function <code>counter</code> that takes an integer <code>count</code> as a parameter. This is the number we will start counting up from. We display a <code>button</code> which can be clicked (<code>onClick</code>) and with a label that shows the count that was passed in. When the button has been clicked, we restart the counter with an incremented count.</p>
+<p>Don't worry if you don't understand the specifics, we'll cover everything later in the book.
+The important thing to note here is that the program is still <em>very</em> simple, and it has scaled only linearly with UI complexity.</p>
+<h1><a class="header" href="#a-quick-tour-of-concur" id="a-quick-tour-of-concur">A Quick Tour of Concur</a></h1>
+<p>Here we'll have a whirlwind tour of all of Concur's features. Keep your hats on!</p>
+<blockquote>
+<p>Rememeber: To simplify things, all the examples will be in Purescript, using the React backend.
+However the concepts would apply to all backends and languages where Concur's model has been ported.</p>
+</blockquote>
+<h1><a class="header" href="#anatomy-of-a-widget" id="anatomy-of-a-widget">Anatomy of a Widget</a></h1>
+<p>Concur is built around composing <code>Widget</code>s. A Widget is something that has a <code>View</code> i.e. a User-Interface, can change in response to some events, and finally return some value.</p>
+<p>The type Widget is parameterised by the type of the View, and the return type. That is to say - a Concur Widget has the type <code>Widget HTML a</code>. Here <code>HTML</code> is the type of the view (i.e. client side apps), and <code>a</code> is the type parameter that denotes <em>what gets returned</em> when the Widget is <em>done</em>.</p>
+<pre><code class="language-purescript">-- A Widget with a View of type HTML (i.e. client side web apps), and returning an Int
+foo :: Widget HTML Int
+</code></pre>
+<p>Especially note that the type of Events handled by the Widget is not a part of its type signature. Nor does the type signature include the type of the <code>Action</code>s performed by the Widget. This is important because each Widget in Concur is self sufficient and can be populated on the page without worrying about the inputs and outputs. All the inputs and outputs are wired at the time of Widget definition, and the user does not need to bother with them at the time of usage.</p>
+<h4><a class="header" href="#hello-world" id="hello-world">Hello World</a></h4>
+<p>Here's a simple widget that displays a button with the text &quot;Hello Sailor!&quot; in Concur -</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = button' [text &quot;Hello Sailor!&quot;]
+</code></pre>
+<p>Concur provides a very simple DSL for constructing HTML DOM elements. This widget is a button with some text inside it.</p>
+<h1><a class="header" href="#widget-return-types" id="widget-return-types">Widget Return Types</a></h1>
+<p>All Widgets in Concur have a <em>lifecycle</em>. But unlike the ad-hoc lifecycle in other frameworks, here the lifecycle is principled and reflected in the type. A widget that stops running after a while but doesn't return anything useful (e.g. a button) usually has the type <code>Unit</code> (or <code>()</code> in Haskell). A widget that displays something and never stops (e.g. a label) has the type <code>forall a. a</code> which is equivalent to <code>Void</code>, or the uninhabited type. Forever looping widgets will also usually have this type. The type itself shows clearly that nothing scheduled to be run after this widget will ever run. I like to call such widgets &quot;Display Widgets&quot;. They are typically used to display static things like text. Because of their polymorphic return type, they can be passed to any function which requires a Widget of a particular return type, which comes in very handy.</p>
+<p>The type of this widget - <code>forall a. Widget HTML a</code> is also automatically inferred by the compiler, so need not be specified. The compiler knows that the return type of this widget is <code>forall a. a</code> because we have not attached any event handlers to the widget, so any dom elements created are static and never end or change.</p>
+<p>The resulting widget is self contained and can be easily populated on the page (within a div with the id &quot;hello&quot;) -</p>
+<pre><code class="language-purescript">main = runWidgetInDom &quot;hello&quot; hello
+</code></pre>
+<h1><a class="header" href="#composing-widgets" id="composing-widgets">Composing Widgets</a></h1>
+<p>Widgets can be easily laid out on the page using the HTML DSL. So you can create a layout with two buttons side by side like so -</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = div'
+  [ button' [text &quot;Ahoy Port!&quot;]
+  , button' [text &quot;Ahoy Starboard!&quot;]
+  ]
+
+</code></pre>
+<p>Or one above the other (using div's to separate them) -</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = div'
+  [ div'
+      [ button' [text &quot;Ahoy Port!&quot;] ]
+  , div'
+      [ button' [text &quot;Ahoy Starboard!&quot;] ]
+  ]
+
+</code></pre>
+<p>Layout is <strong>composition</strong> <em>in space</em>. The two button widgets occupy different parts of the page, depending on the layout, but run together <em>in time</em>. Under the hood, composition in space is equivalent to Monoidal composition. The key characteristic of monoidal composition is that the type of the combined widget is the same as the type of the individual widgets (which must match). As we saw earlier, the type of the individual buttons is <code>forall a. Widget HTML a</code>, so the type of the combined widget is also the same. So the entire widget can be placed anywhere a single button can be.</p>
+<p>This leads to surprising power, since effectively, the return values <em>bubble</em> up the DOM tree, and you can then handle the return value at any level of granularity.</p>
+<p>We'll further discuss layout, but first, we need to discuss event handling.</p>
+<h1><a class="header" href="#event-handling" id="event-handling">Event Handling</a></h1>
+<p>In the previous examples, clicking the buttons does nothing. After all, we haven't attached an event handler to the button! Traditionally, responding to user input seems to be the place where complexity creeps into the application. In Elm, for example, this is the place where you would reach out for the <em>Elm Architecture</em>.</p>
+<p>Handling external events is where Concur shines. It does away with all the incidental complexity and lets you focus on the program logic. I'll make a claim that handling generic user events in Concur is simpler than any other library/framework in any programming language ever. If you know of anything else simpler, please let me know.</p>
+<p>In Concur, you can just attach tags to the widgets to indicate the events you wish to handle, and then handle them synchronously in the program flow. Concur takes care of all the plumbing and concurrency for you. This is part of where Concur's name comes from - its support for Concurrency. The other reason for Concur's name is due to what I call aliasing of types - where adjacent types and properties must agree (concur) before they can be composed, which leads to increased type safety and powerful composition primitives. We'll discuss concurrency and composition primitives later in this guide.</p>
+<p>Let's say we want to show a greeting to the user when the button is is clicked. We can do so very easily, by attaching an <code>onClick</code> attribute to the button. We have to use <code>button</code> instead of <code>button'</code>. (<code>button'</code> is defined simply as <code>button []</code> for convenience).</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = do
+  void $ button [onClick] [text &quot;Say Hello&quot;]
+  text &quot;Hello Sailor!&quot;
+</code></pre>
+<p>That's right, <code>text</code> is also a complete widget on its own, which we are composing with the <code>button</code> widget. Here we use do-notation to compose two widgets <em>in time</em>. The text widget never runs at the same time as the button, and only shows up when, and as soon as, the button is clicked.</p>
+<p>The final effect is that we see a button with the text &quot;Say Hello&quot;, which when clicked gets replaced by text &quot;Hello Sailor!&quot;. Ain't that easy!</p>
+<p>Again, pay attention to the final type of the widget. It's the same as before (<code>forall a. Widget HTML a</code>) even though this time we <em>did</em> attach an event handler. However, we handle the event entirely internally, and simply change to a static widget (<code>text</code>) in response. So from the perspective of the rest of the program, the widget never returns.</p>
+<h3><a class="header" href="#a-digression-on-the-type-of-a-plain-button-widget" id="a-digression-on-the-type-of-a-plain-button-widget">A digression on the type of a plain button widget</a></h3>
+<p>So what <em>is</em> the type when you don't handle the button click event internally? To be specific, what is the type of the following widget -</p>
+<pre><code class="language-purescript">button [onClick] [text &quot;Say Hello&quot;]
+</code></pre>
+<p>The type is <code>Widget HTML SyntheticMouseEvent</code>, where the <code>SyntheticMouseEvent</code> is the type synonym for a record that basically maps a javascript mouse event.</p>
+<p>In Concur, the standard pattern is <code>Widget a = someDomElementWrapper [Prop a, Prop a, ...] [Widget a, Widget a,...]</code>. i.e. to get the return type of a Widget, you just need to look at the return type of any of the props passed to it, or the return type of any child widgets passed to it. In Concur, the types of the props, the children, and the parent widget itself must agree (or... concur, pun intended).</p>
+<p>So the return type of <code>button [onClick] [text &quot;Say Hello&quot;]</code> is necessarily the same as the return type of <code>onClick</code> which is defined in <code>Concur.React.Props</code>. Which you will find is <code>SyntheticMouseEvent</code>.</p>
+<p>If you try to check the type yourself in the purescript repl with :t, you would see the properties you can access on the event object -</p>
+<pre><code>&gt; :t button [onClick] [text &quot;Say Hello&quot;]
+Widget (Array ReactElement)
+  (SyntheticEvent_
+     ( altKey :: Boolean
+     , button :: Number
+     , buttons :: Number
+     , clientX :: Number
+     , clientY :: Number
+     , ctrlKey :: Boolean
+     , getModifierState :: String -&gt; Boolean
+     , metaKey :: Boolean
+     , pageX :: Number
+     , pageY :: Number
+     , relatedTarget :: NativeEventTarget
+     , screenX :: Number
+     , screenY :: Number
+     , shiftKey :: Boolean
+     , detail :: Number
+     , view :: NativeAbstractView
+     , bubbles :: Boolean
+     , cancelable :: Boolean
+     , currentTarget :: NativeEventTarget
+     , defaultPrevented :: Boolean
+     , eventPhase :: Number
+     , isTrusted :: Boolean
+     , nativeEvent :: NativeEvent
+     , target :: NativeEventTarget
+     , timeStamp :: Number
+     , type :: String
+     )
+  )
+</code></pre>
+<p>Here the <code>Array ReactElement</code> is the same as <code>HTML</code>, and everything after that is the mouse event.</p>
+<h1><a class="header" href="#modifying-dom-on-events" id="modifying-dom-on-events">Modifying DOM on Events</a></h1>
+<p>What if we want to modify the original button, instead of replacing it entirely? Surely that would require having some sort of &quot;architecture&quot; or design pattern in place? As it happens to be, even in that case we don't need a separate workflow. Instead, we exploit a little trick of virtual dom, and replace the original button with a conceptually different button, and Concur takes care of updating the button efficiently instead of replacing it entirely.</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = do
+  void $ button [onClick] [text &quot;Say Hello&quot;]
+  button' [text &quot;Hello Sailor!&quot;]
+</code></pre>
+<p>What if you wanted to do different things based on the user input itself. For example, you want to show a different greeting depending on which button was pressed.</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = do
+  greeting &lt;- div'
+    [ &quot;Hello&quot; &lt;$ button [onClick] [text &quot;Say Hello&quot;]
+    , &quot;Namaste&quot; &lt;$ button [onClick] [text &quot;Say Namaste&quot;]
+    ]
+  text (greeting &lt;&gt; &quot; Sailor!&quot;)
+</code></pre>
+<p>You can see that layout and event handling seemlessly combine in Concur. We use <code>&lt;$</code> operator to assign a return value to each of the buttons. Since the buttons are composed in space using the HTML DSL, they are both shown together. Then the return value of the combined widget is the return value of whichever button is clicked. We then fetch the return value (i.e. the greeting), and display it as a part of our text message.</p>
+<p>Everything works predictably, and using the tools you already have.</p>
+<p>I must mention that it's quite possible to compose widgets together without wrapping them in a div. Use the operator <code>&lt;|&gt;</code> to accomplish that. For example, composing two buttons directly -</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello =
+  button' [text &quot;Ahoy Port!&quot;]
+    &lt;|&gt;
+  button' [text &quot;Ahoy Starboard!&quot;]
+</code></pre>
+<p>You can also use <code>orr</code> which composes any number of widgets in a list.</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = orr
+  [ button' [text &quot;Ahoy Port!&quot;]
+  , button' [text &quot;Ahoy Starboard!&quot;]
+  , button' [text &quot;One more button!&quot;]
+  ]
+</code></pre>
+<p>Indeed, both <code>&lt;|&gt;</code> and <code>div</code> (and all other HTML DSL wrappers) are implemented in terms of <code>orr</code>.</p>
+<h1><a class="header" href="#handling-multiple-events" id="handling-multiple-events">Handling Multiple Events</a></h1>
+<p>You can have mutliple event handlers on the same widget easily.</p>
+<p>Here's an example of an input element with both change and focus handlers.</p>
+<pre><code class="language-purescript">data Action = Changed String | Focused
+
+inputWidget :: Widget HTML Action
+inputWidget = input [(Changed &lt;&lt;&lt; unsafeTargetValue) &lt;$&gt; onChange, Focused &lt;$ onFocus]
+</code></pre>
+<p>(The <code>unsafeTargetValue</code> is equivalent to <code>event.target.value</code> in Javascript. It's literally defined as <code>(unsafeCoerce e).target.value</code>. It's &quot;unsafe&quot; because it can't statically guarantee that the onChange handler has been called on a target with a value. We are considering implementing a better more-typesafe API for getting the target value.)</p>
+<p>Here <code>inputWidget</code> will return an <code>Action</code>, whenever the text is changed, or when it receives focus.</p>
+<p>You don't need an action data type if you decide to process the action in line. For example, if you maintain a state -</p>
+<pre><code class="language-purescript">type State = {focusCount:: Int, currentText :: String}
+
+inputWidget :: State -&gt; Widget HTML State
+inputWidget st = input [st {focusCount = st.focusCount+1} &lt;$ onFocus
+                       , ((\s -&gt; st {currentText = s}) &lt;&lt;&lt; unsafeTargetValue) &lt;$&gt; onChange]
+</code></pre>
+<p>Now <code>inputWidget</code> will return the new application state whenever the text is changed or whenever it receives focus.</p>
+<h1><a class="header" href="#composing-widgets-with-events" id="composing-widgets-with-events">Composing Widgets with Events</a></h1>
+<p>As previously mentioned, Concur Widgets compose seamlessly, in space, and in time, and the composition is dictated by the types of the Widgets. Let's discuss that further.</p>
+<p>The following widget will forever move between &quot;Ping&quot; and &quot;Pong&quot; buttons, and will never end. Hence it has the type <code>forall a. Widget HTML a</code></p>
+<pre><code class="language-purescript">pingPong :: forall a. Widget HTML a
+pingPong = do
+  forever $ do
+    button [onClick] [text &quot;Ping&quot;]
+    button [onClick] [text &quot;Pong&quot;]
+  text &quot;This text will never be shown&quot;
+</code></pre>
+<p>Note that all widgets, which are either static, or entirely self contained and run forever, have the type <code>forall a. Widget HTML a</code>, which can be composed with any other widget. This means that they can be dropped into any part of the layout without affecting the types or the logic of the rest of the application. So if you have a button in the middle of the UI somewhere - <code>button [onClick] [text &quot;Blah&quot;]</code> - and you wanted to add a text label alongside, the combined widget <code>div_ [text &quot;Click this button&quot; , button [onClick] [text &quot;Blah&quot;]]</code> will be conceptually equal to the button on its own.</p>
+<p>Including a formal notion of a widget lifecycle, and a return type, has distinct advantages. For example, unlike other frameworks, the user never has to manually plumb events, state, and view updates together. So if you have a counter widget which returns an Integer -</p>
+<pre><code class="language-purescript">-- A counter widget takes the initial count as argument, and returns the updated count
+counter :: Int -&gt; Widget HTML Int
+counter count = do
+  button [onClick] [text (show count)]
+  pure (count + 1)
+</code></pre>
+<p>You can compose an entire list of them easily on a webpage. The return value of the combined widget is the value of the first counter to return.</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+-- The return value is the value of the counter which is clicked
+listCounters :: Array Int -&gt; Widget HTML Int
+listCounters = orr &lt;&lt;&lt; map counter
+</code></pre>
+<p>Now if we want to distinguish which counter was updated, we can use the <code>Functor</code> instance of Widgets to tag the return type. Widgets are also <code>Applicative</code> (and as we have already seen, <code>Monad</code>). These instances, allow a natural handling of return values using <code>&lt;$&gt;</code>, <code>&lt;*&gt;</code>, <code>&lt;$</code>, monadic do-notation, etc. So we can now return the updated count tagged with the index of the Counter which was clicked -</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+-- The return value is the value which was clicked together with its index.
+listCounters :: Array Int -&gt; Widget HTML {count: Int, index: Int}
+listCounters initialCounts = orr (mapWithIndex mkCount initialCounts)
+  where mkCount index = map (\count -&gt; {index, count}) &lt;&lt;&lt; counter
+</code></pre>
+<p>See how we map over the widgets to modify the return value to a record with index.</p>
+<p>Or even better, you can simply return the modified counts together as a list, so the initial list of counts and the final list of counts have the same type.</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+listCounters :: Array Int -&gt; Widget HTML (Array Int)
+listCounters initialCounts = orr (mapWithIndex (mkCount initialCounts) initialCounts)
+  where mkCount initialCountArray index initCount = map (\count -&gt; fromMaybe initialCountArray (updateAt index count initialCountArray)) (counter initCount)
+</code></pre>
+<p>It's also important to note, that the new list widget is still short and encapsulated within a single function (<strong>As it really should be</strong>).</p>
+<p>Of course, Concur also provides a better way to show multiple widgets in parallel and collect the output from each of them. It's called <code>andd</code> and it waits until all the reponses have been received (compare with <code>orr</code> which returns the first successful response). With <code>andd</code> you can simply write -</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+listCounters :: Array Int -&gt; Widget HTML (Array Int)
+listCounters initialCounts = andd (map counter initialCounts)
+</code></pre>
+<h1><a class="header" href="#input-output" id="input-output">Input Output</a></h1>
+<p>Concur provides seamless IO at widget boundaries. This is another area where other frameworks falter. Since concurrency is baked into and integral to Concur, IO becomes predictable and powerful. Concur provides lifting functions to lift IO into widgets, and those lifted io widgets can be easily composed just like any other normal widget.</p>
+<p>Continuing our previous example, if we want to print the greeting selected by the user to the console.</p>
+<pre><code class="language-purescript">helloWidget :: forall a. Widget HTML a
+helloWidget = do
+  greeting &lt;- div'
+    [ &quot;Hello&quot; &lt;$ button [onClick] [text &quot;Say Hello&quot;]
+    , &quot;Namaste&quot; &lt;$ button [onClick] [text &quot;Say Namaste&quot;]
+    ]
+  liftEffect (log (&quot;You chose to say &quot; &lt;&gt; greeting))
+  text (greeting &lt;&gt; &quot; Sailor!&quot;)
+</code></pre>
+<p>Here we use <code>liftEffect</code> to convert an effect into a widget. In Haskell, we can use <code>liftIO</code>.</p>
+<p>Lifting IO to Widgets means we can compose IO in parallel with other Widgets. This can lead to some nice patterns. Two examples -</p>
+<ol>
+<li>Allow cancelling long running IO actions in response to GUI events, without any boilerplate. Let's say we want to create a timer which can be cancelled. The following widget will return when the timer completes after a specified duration, or when the button is pressed, whichever is first. Whenver the button is pressed, the timer thread is automatically cancelled so you don't have to do that manually.</li>
+</ol>
+<pre><code class="language-purescript">timerWidget ms = liftAff (delay (Milliseconds ms)) &lt;|&gt; button [unit &lt;$ onClick] [text &quot;Cancel&quot;]
+</code></pre>
+<ol start="2">
+<li>Show a &quot;Loading&quot; screen while performing IO, let's say while making an ajax call.</li>
+</ol>
+<pre><code class="language-purescript">resp &lt;- liftAff (AX.get ResponseFormat.json url) &lt;|&gt; text &quot;Fetching posts from subreddit...&quot;
+</code></pre>
+<p>Also note that the ability to perform IO actions from Widgets is very handy when creating bindings to existing native/JS libraries.</p>
+<h1><a class="header" href="#architectural-notes" id="architectural-notes">Architectural Notes</a></h1>
+<p>Here we collect some tips on building large programs with Concur.</p>
+<h1><a class="header" href="#replicating-elm-architecture" id="replicating-elm-architecture">Replicating Elm Architecture</a></h1>
+<p>Concur is strictly more powerful, while simultaneously being easier to use than Elm. We were able to compose widgets, handle events, and dynamically change the page contents without adopting an &quot;architecture&quot;, or manually threading any state or action data structures.</p>
+<ol>
+<li>
+<p>With Concur, there's no magic with effects and actions involved. A 'Widget' means a very simple thing - A section of UI which returns a value. Using this single concept, it's trivial to recreate the Elm architecture, but while remaining in full control, and understanding every step of the process.</p>
+</li>
+<li>
+<p>There is no global state, and you can use local state with as fine a granularity as desired. Moreover, the resulting widget can be used within other widgets without having to thread in its state manually. Everything just works!</p>
+</li>
+</ol>
+<p>Here's an example of building a small form with Concur -</p>
+<pre><code class="language-purescript">-- This is like Elm's State
+type Form =
+  { name :: String
+  , rememberMe :: Boolean
+  }
+
+-- This is like Elm's Action
+data FormAction
+  = Name String
+  | RememberMe Boolean
+  | Submit
+
+formWidget :: Form -&gt; Widget HTML Form
+formWidget form = do
+  -- This is like Elm's view function
+  res &lt;- div'
+    [ Name &lt;$&gt; input [_type &quot;text&quot;, value form.name, unsafeTargetValue &lt;$&gt; onChange]
+    , RememberMe (not form.rememberMe) &lt;$ input [_type &quot;checkbox&quot;, checked form.rememberMe, onChange]
+    , Submit &lt;$ button [onClick] [text &quot;Submit&quot;]
+    ]
+  -- This is like Elm's update function
+  case res of
+    Name s -&gt; formWidget (form {name = s})
+    RememberMe b -&gt; formWidget (form {rememberMe = b})
+    Submit -&gt; pure form
+</code></pre>
+<p>Now you can use <code>formWidget</code> as a regular widget anywhere else in the rest of your application (<a href="https://github.com/purescript-concur/purescript-concur-react/blob/master/examples/src/Test/TheElmArchitecture.purs">working example</a>). Note that the other parts of your application don't need to know about <code>FormAction</code> at all.</p>
+<p>This is surprisingly powerful and composable. Let's build a widget which allows editing an arbitrary list of such forms in a sequence and then returns the list of modified forms. How many more lines of code are needed to accomplish that?</p>
+<p>The program is literally two words long i.e. <code>traverse formWidget</code>.</p>
+<pre><code class="language-purescript">multiFormWidget :: Array Form -&gt; Widget HTML (Array Form)
+multiFormWidget = traverse formWidget
+</code></pre>
+<p>Here, we use the fact that <code>Widget</code> also has an <code>Applicative</code> instance (along with Functor and Monad instances) -</p>
+<p>If instead you wanted to allow editing all the forms together, you would do -</p>
+<pre><code class="language-purescript">multiFormWidget :: Array Form -&gt; Widget HTML (Array Form)
+multiFormWidget = andd &lt;&lt;&lt; map formWidget
+</code></pre>
+<p>Compare that with all the plumbing with Events, Actions, and State, that is needed for an equivalent <em>Elm</em> program. It would be even worse with something like <em>Reflex</em> because you would have to keep track of where you were in the list in the editing process, and also, what the values of the previously submitted forms are, and you would have to do that by composing events while manipulating the DOM (try it).</p>
+<h1><a class="header" href="#plan-for-composability-by-breaking-down-components" id="plan-for-composability-by-breaking-down-components">Plan for Composability by Breaking Down Components</a></h1>
+<p>Concur has a very simple and consistent Widget model. However there are a few situations where the simplicity of the model leads you down the wrong path in terms of code organisation.</p>
+<p>The most common of such situations is when you have a specification for a widget, and you build it in a straightforward manner using Concur's monadic flow with a recursive call at the end. You don't need to create a data structure to represent the internal state of the widget.</p>
+<p>Taking the example of the greeting selector we built earlier -</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = do
+  greeting &lt;- div'
+    [ &quot;Hello&quot; &lt;$ button [onClick] [text &quot;Say Hello&quot;]
+    , &quot;Namaste&quot; &lt;$ button [onClick] [text &quot;Say Namaste&quot;]
+    ]
+  text (greeting &lt;&gt; &quot; Sailor!&quot;) &lt;|&gt; button [onClick] [text &quot;restart&quot;]
+  hello
+</code></pre>
+<p>Note that the type of the widget is <code>forall a. Widget HTML a</code>. This means that the Widget is entirely self contained, which is a good thing for usability, but also bad in terms of composability. You are not able to combine this widget with other widgets in meaningful ways, and other widgets on the page cannot depend on the actual greeting selected. <strong>Note: Actually, it often makes sense to compose never-ending widgets. Look at the next section on &quot;Never-ending Components to see how.</strong></p>
+<p><em>The idiomatic and reusable Concur widget does one thing and returns a value</em>. So to make this reusable, we need to remove the recursive call at the end, and instead return the greeting selected.</p>
+<pre><code class="language-purescript">getGreeting :: Widget HTML String
+getGreeting = div'
+    [ &quot;Hello&quot; &lt;$ button [onClick] [text &quot;Say Hello&quot;]
+    , &quot;Namaste&quot; &lt;$ button [onClick] [text &quot;Say Namaste&quot;]
+    ]
+</code></pre>
+<p>And then having a separate widget which consumes that greeting, and allows the user to exit.</p>
+<pre><code class="language-purescript">showGreeting :: String -&gt; Widget HTML Unit
+showGreeting greeting = div'
+  [ text (greeting &lt;&gt; &quot; Sailor!&quot;)
+  , void $ button [onClick] [text &quot;restart&quot;]
+  ]
+</code></pre>
+<p>And then compose them together when needed.</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = do
+  greeting &lt;- getGreeting
+  showGreeting greeting
+  hello
+</code></pre>
+<p>Now the composition logic and the recursive call is isolated from the rest of the UI code, and can be easily changed if needed.</p>
+<p>For example, if the requirement changes to also always display the previously selected greeting, then you can do that without changing <code>getGreeting</code>, and <code>showGreeting</code>, and making only minimal changes to <code>hello</code>. We need to take the previous greeting as a parameter, and then loop on the new greeting when one has been selected.</p>
+<pre><code class="language-purescript">hello :: String -&gt; forall a. Widget HTML a
+hello prev = hello =&lt;&lt; div'
+  [ text (&quot;Previous greeting - &quot; &lt;&gt; prev)
+  , do
+      greeting &lt;- getGreeting
+      showGreeting greeting
+      pure greeting
+  ]
+
+helloWithPrev :: forall a. Widget HTML a
+helloWithPrev = hello &quot;&quot;
+</code></pre>
+<h1><a class="header" href="#composing-never-ending-widgets" id="composing-never-ending-widgets">Composing Never Ending Widgets</a></h1>
+<p>As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, <em>as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data</em>. <strong>(PS: There are ways to get data out of a never ending widget as well. See <a href="https://pursuit.purescript.org/packages/purescript-concur-core/docs/Concur.Core.Patterns#v:remoteWidget">remoteWidget</a> for an example)</strong>.</p>
+<p>Composing never ending widgets works because parent widgets completely control the child widgets, and can remove them from the view at will irrespective of whether the widget ended.</p>
+<p>So you can imagine a &quot;Dashboard&quot; type widget which displays some complex data and even allows complex user interaction to slice and dice the data, however never supplies any data back to the rest of the app. It may have a type signature like - <code>dashboard :: CompanyData -&gt; forall a. Widget HTML a</code>.</p>
+<p>You can have a separate widget called <code>awaitDataChange</code> that watches for changes to the company data and returns the changed data. Perhaps it shows a UI that allows the user to edit the data themselves, or gets it from a database hook or some other source. You can still compose that with the dashboard widget like so -</p>
+<pre><code class="language-purescript">app data = do
+  -- The dashboard widget will be removed as soon as new data comes in
+  newData &lt;- dashboard data &lt;|&gt; awaitDataChange
+  -- Now we can just restart the dashboard widget with the new data
+  app newData
+</code></pre>
+<h1><a class="header" href="#signals" id="signals">Signals</a></h1>
+<p><a href="https://pursuit.purescript.org/packages/purescript-concur-core/docs/Concur.Core.FRP#t:Signal">Signal</a>s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.</p>
+<h1><a class="header" href="#introduction-to-signals" id="introduction-to-signals">Introduction to Signals</a></h1>
+<p>To see why we need Signals, let's reconsider the greeting selector example from the previous section. We need to display a greeting selector, and then greet the user with that selected greeting, and finally allow the user to restart the cycle.</p>
+<p>The most straightforward way of writing this is directly in one go using monadic recursion -</p>
+<pre><code class="language-purescript">hello :: forall a. Widget HTML a
+hello = do
+  greeting &lt;- div'
+    [ &quot;Hello&quot; &lt;$ button [onClick] [text &quot;Say Hello&quot;]
+    , &quot;Namaste&quot; &lt;$ button [onClick] [text &quot;Say Namaste&quot;]
+    ]
+  text (greeting &lt;&gt; &quot; Sailor!&quot;) &lt;|&gt; button [onClick] [text &quot;restart&quot;]
+  hello
+</code></pre>
+<p>As we discussed in the previous section, to make this widget composable and maintainable, we should separate the recursive call from the rest of the code. However there are two things that are unsatisfactory about that -</p>
+<ol>
+<li>The most straightforward way to write something is not the idiomatic way to write something. We have lost a property that Concur prides itself on.</li>
+<li>The complete behaviour of the widget includes the UI <em>and</em> the recursion. It feels unsatisfactory to <em>have to</em> separate the two in order to be able to compose things.</li>
+</ol>
+<p><strong>Enter Signals.</strong></p>
+<p>In essence, A Signal is a recursive / never ending widget which can still be composed seamlessly. Like a Widget, a Signal is also parameterised on the View, and the return value. A Signal is of type <code>Signal v a</code>, where <code>v</code> is the type of the view, and <code>a</code> is the return value. However, a signal does not &quot;end&quot; after returning a value, but is instead free to keep processing. Apart from being able to compose with other Signals, a Signal is conceptually equivalent to a never-ending Widget <code>forall a. Widget HTML a</code>.</p>
+<p>So we have a function called <code>dyn</code> which can take a Signal and converts it to a never-ending Widget so it can be displayed.</p>
+<pre><code class="language-purescript">dyn :: forall v a b. Signal v a -&gt; Widget v b
+</code></pre>
+<p>Here we ignore the return value of the Widget, since we can't make use of it in Widget space, and return a widget with an indeterminate value <code>b</code>, i.e. the Widget is never-ending.</p>
+<h1><a class="header" href="#your-first-signal" id="your-first-signal">Your First Signal</a></h1>
+<p>So how do we build signals? The workhorse for that is the function <code>step</code>. It is dual to <code>dyn</code>, in that it allows creating a Signal from a Widget.</p>
+<pre><code class="language-purescript">step :: forall v a. a -&gt; Widget v (Signal v a) -&gt; Signal v a
+</code></pre>
+<p>Each Signal always has a value associated with it. It's a <a href="https://pursuit.purescript.org/packages/purescript-control/docs/Control.Comonad#t:Comonad">Comonad</a>, so the current value of the Signal can be extracted with <code>extract</code>.</p>
+<p>Step takes the initial value of the signal as its first argument. The second argument is the Widget. This way of creating Signals requires recursion to be implemented in continuation passing style. The Widget passed in needs to perform some work, and then return the continuation Signal.</p>
+<p>Let's rewrite our hello example with Signals -</p>
+<pre><code class="language-purescript">hello :: String -&gt; Signal HTML String
+hello s = step s do
+  greeting &lt;- div'
+    [ &quot;Hello&quot; &lt;$ button [onClick] [text &quot;Say Hello&quot;]
+    , &quot;Namaste&quot; &lt;$ button [onClick] [text &quot;Say Namaste&quot;]
+    ]
+  text (greeting &lt;&gt; &quot; Sailor!&quot;) &lt;|&gt; button [onClick] [text &quot;restart&quot;]
+  pure (hello greeting)
+</code></pre>
+<p>It's almost the same as the straightforward Widget version! The only things that changed are that we had to specify the initial value of the greeting (by passing it as an argument to <code>step</code>), and we had to change the explicit recursion to CPS by returning <code>hello</code> instead of directly calling <code>hello</code>.</p>
+<p>Now we can use it with <code>dyn</code> -</p>
+<pre><code class="language-purescript">helloWidget :: forall a. Widget HTML a
+helloWidget = dyn $ hello &quot;&quot;
+</code></pre>
+<h1><a class="header" href="#converting-display-widgets" id="converting-display-widgets">Converting Display Widgets</a></h1>
+<p>Building Signals from &quot;Display Widgets&quot; i.e. never ending widgets is even easier. Here we can use a function called <code>display</code>. It's a convenience function provides the initial value for <code>step</code> when its type has only one possible inhabitant (i.e. <code>Unit</code>). It is defined like this -</p>
+<pre><code class="language-purescript">display :: Widget HTML (Signal HTML Unit) -&gt; Signal HTML Unit
+display = step unit
+</code></pre>
+<p>Note that you don't need to worry about the initial value of the signal here. Never ending widgets have a polymorphic return type <code>forall a. a</code>, so they can be passed to <code>display</code> without issues (the polymorphic <code>a</code> is just resolved to a <code>Signal HTML Unit</code> by the type checker).</p>
+<p>An example of its usage -</p>
+<pre><code class="language-purescript">textSignal :: Signal HTML Unit
+textSignal = display (text &quot;Hello Sailor!&quot;)
+</code></pre>
+<h1><a class="header" href="#signal-composition" id="signal-composition">Signal Composition</a></h1>
+<p>Signals mimic traditional FRP by offering Monadic composition. It's always composition <em>in space</em> since Signals don't have a lifecycle, and run forever (until removed entirely from the page). That is to say that Signals don't have (or need) composition <em>in time</em>.</p>
+<p>Need to display a list of greeting widgets on the page at the same time?</p>
+<pre><code class="language-purescript">helloList :: Array String -&gt; Signal HTML (Array String)
+helloList = traverse hello
+</code></pre>
+<p>The Signal will show all the individual widgets at the same time, and allow editing them at the same time. Note that we did not have to manage the recursion for individual signals when composing them.</p>
+<p>What if we want to also display the currently selected greetings for all the hello widgets together at the top level?</p>
+<pre><code class="language-purescript">helloListWithDisplay :: Array String -&gt; Signal HTML (Array String)
+helloListWithDisplay prev = div_ [] do
+  traverse hello prev
+  display (text (&quot;Previously selected greetings - &quot; &lt;&gt; show prev))
+</code></pre>
+<p>Note that we were able to use the same HTML DSL to wrap signals in DOM elements. <code>div_</code> is the same as <code>div</code>, but requires only a single child element.</p>
+<p>To understand how the composition works, think of monadic composition of signals like a waterfall. When you perform Signal <code>foo</code> and then Signal <code>bar</code>, both <code>foo</code> and <code>bar</code> are performed continuously. However, every time the upstream Signal <code>foo</code> emits a value, the value of downstream <code>bar</code> is recomputed.</p>
+<p>This leads to the question of layout. Signal views are displayed in the same order as the monadic composition. However, we might require a value from a later Signal to compute the value of an earlier signal. This is the classic problem with mixing monadic composition with layout, and is faced by all current FRP libraries. Concur Signals have a very simple solution for this - Loops.</p>
+<p>There is an operator called <code>loopS</code> provided which loops back the return value of a signal to the beginning. This is like <code>MonadFix</code> but less magical. So you can do this -</p>
+<pre><code class="language-purescript">helloListWithDisplay :: Signal HTML (Array String)
+helloListWithDisplay prev = loopS prev \prev' -&gt; div_ [] do
+  display (text (&quot;Previously selected greetings - &quot; &lt;&gt; show prev'))
+  traverse hello prev'
+</code></pre>
+<h1><a class="header" href="#signal-example" id="signal-example">Signal Example</a></h1>
+<p>Here's an example of using Signals to implement a counter widget where the count is also automatically incremented every second -</p>
+<pre><code class="language-purescript">mainWidget :: forall a. Widget HTML a
+mainWidget = do
+  dyn $ loopS 0 \n -&gt; do
+    display $ D.text (show n)
+    n' &lt;- incrementTicker n
+    counterSignal n'
+
+-- Counter
+counterSignal :: Int -&gt; Signal HTML Int
+counterSignal init = loopW init $ \n -&gt; D.div'
+  [ n+1 &lt;$ D.button [P.onClick] [D.text &quot;+&quot;]
+  , D.div' [D.text (show n)]
+  , n-1 &lt;$ D.button [P.onClick] [D.text &quot;-&quot;]
+  ]
+
+-- Timer
+incrementTicker :: Int -&gt; Signal HTML Int
+incrementTicker init = loopW init $ \n -&gt; do
+  liftAff $ delay $ Milliseconds 1000.0
+  pure (n+1)
+</code></pre>
+<h1><a class="header" href="#some-notes-on-signal-usage" id="some-notes-on-signal-usage">Some Notes on Signal Usage</a></h1>
+<ol>
+<li>
+<p>A <code>Signal</code> is basically a <code>Widget</code> + <code>looping</code>. So <code>loopW</code>, which provides stateful looping, is the easiest way to generate individual signals.</p>
+</li>
+<li>
+<p>Signals are &quot;continuous&quot;, i.e. they always have a current value. So the notion of &quot;merging&quot; signals does not arise except as a zipping operation, where you provide a continuous function which combines individual values from the constituent signals. This &quot;zipping&quot; is possible using monadic bind like so -</p>
+</li>
+</ol>
+<pre><code class="language-purescript">do
+  a &lt;- signal1
+  b &lt;- signal2
+  c &lt;- signal3
+  pure (someFunction a b c)
+</code></pre>
+<ol start="3">
+<li>If a signal depends on the value of another <strong>upstream</strong> signal, you can just express that dependency with parameter passing. For example, if <code>signal2</code> depends on the output from <code>signal1</code>, and <code>signal3</code> depends on the output of both <code>signal1</code> and <code>signal2</code> then -</li>
+</ol>
+<pre><code class="language-purescript">do
+  a &lt;- signal1
+  b &lt;- signal2 a
+  c &lt;- signal3 a b
+  pure (someFunction a b c)
+</code></pre>
+<ol start="4">
+<li>A slight complication occurs when a signal depends on the value of a <strong>downstream</strong> signal, we need to use the <code>loopS</code> combinator which &quot;loops&quot; the value of the last signal back up to the top so that the upstream signals can use it. Note that you would need the last signal to carry <strong>all</strong> the values that are needed by the upstream signals.</li>
+</ol>
+<p>Usually you would have some sort of a state that is accessible to all the constituent signals, and loop over that state. In the counter+timer example, the timer and the counter both depended on the current count. So we need to loop the current count over.</p>
+<ol start="5">
+<li>Note that sometimes this changes the final return value of the signal away from what you want. So you may need to <code>map</code> the final composition function on top of the signal value.</li>
+</ol>
+<p>To take a pedantic example - if <code>signal1</code> also depended on the values of <code>signal2</code> and <code>signal3</code>, we can have <code>signal3</code> return those values and make them available to <code>signal1</code> with <code>loopS</code>. Let's assume that the initial values for <code>signal2</code> is <code>initialB</code> and for <code>signal3</code> is <code>initialC</code>.</p>
+<pre><code class="language-purescript">loopS {b:initialB, c:initialC} \{b, c} -&gt; do
+  a &lt;- signal1 b c
+  b' &lt;- signal2 a
+  c' &lt;- signal3 a b'
+  pure {b:b', c:c'}
+</code></pre>
+<p>But now the final value of the signal is <code>Tuple b c</code>. So we need to fix that. We need to add the value of <code>signal1</code> to the output since that's needed in the final output, and then map over with <code>someFunction</code> -</p>
+<pre><code class="language-purescript">s = g &lt;$&gt; innerSignal
+  where
+    g {a,b,c} = someFunction a b c
+    innerSignal = loopS {a:initialA, b:initialB, c:initialC} \{b, c} -&gt; do
+      a' &lt;- signal1 b c
+      b' &lt;- signal2 a'
+      c' &lt;- signal3 a' b'
+      pure {a:a', b:b', c:c'}
+</code></pre>
+<p>Not pretty, but usually you won't have such complicated state and dependencies.</p>
+<h1><a class="header" href="#faqs" id="faqs">FAQs</a></h1>
+<p>Here we collect some long form answers to questions people asked on the internet.</p>
+<h1><a class="header" href="#why-the-concur-model" id="why-the-concur-model">Why the Concur Model</a></h1>
+<p>Taken from my answer to <a href="https://github.com/jviide/flowponent/issues/2">this question</a></p>
+<h2><a class="header" href="#qs-why-the-concur-model" id="qs-why-the-concur-model">Qs. Why the Concur model?</a></h2>
+<p>Not a negative sentiment, but legitimately curious.</p>
+<p>I checked out the Concur repos and docs + samples to try to get a better understanding of this, but at first-glance it seems like additional complexity that could be handled with plain logical statements in the render method?</p>
+<p>If it is not too much trouble, could you explain a bit why using this type of flow is different or better than having a view that gets injected with stateful data and re-renders normally?</p>
+<h2><a class="header" href="#ans" id="ans">Ans.</a></h2>
+<p>The answer I usually give for Concur is that this flow based paradigm is simpler <em>and</em> scales better to larger programs. This is usually because our mental model fits synchronous control flow, and free composition of widgets better.</p>
+<h3><a class="header" href="#its-really-simple-for-simple-real-world-code" id="its-really-simple-for-simple-real-world-code">It's really simple for simple real world code</a></h3>
+<p>Think of when a person first learns to program, and writes something beyond plain hello world, which was output only, to something that is interactive.</p>
+<p>Say, accept a user's name and then say hello to them. They probably would intuitively write something like this, assuming appropriate <code>getInput</code> and <code>log</code> functions -</p>
+<pre><code class="language-purescript">name &lt;- getInput &quot;What is your name&quot;
+log &quot;Hello &quot;+name
+</code></pre>
+<p>This is simple, and works. Hey programming is easy!</p>
+<p>But as soon as they start thinking of even slightly larger programs, they have to change their mental model completely. They have to deal with asynchronous behaviour (event handlers), and different input/output modes (interacting with the DOM instead of alert/prompt), and code architecture issues (how do you build a larger program from a smaller one without rewriting completely).</p>
+<p>Imagine if writing a simple hello world involved something like this from the get go (In javascript now) -</p>
+<pre><code class="language-javascript">setInitialState({name: null})
+onRender() {
+  let {name} = getState()
+  if(name == null) {
+    prompt(&quot;What is your name&quot;,
+      userInput =&gt; setState({name: userInput})
+    )
+  } else {
+    alert(&quot;Hello &quot;+name)
+  }
+}
+</code></pre>
+<p>It's pretty crummy and hard to understand for new programmers, and hides the actual logic behind a lot of cruft.</p>
+<p>Concur/Flowponent lets you have the original easy model or programming, without losing anything.</p>
+<pre><code class="language-purescript">name &lt;- textInputEnter &quot;What is your name?&quot; true []
+D.text $ &quot;Hello &quot; + name
+</code></pre>
+<p>This code is asynchronous with event handlers, and can output to the dom (<code>textInputEnter</code> and <code>D.div</code> are a part of Purescript-Concur-React).</p>
+<p>Also the logic doesn't rely on a magic <code>render</code> method which is called automatically just when you need it to be called (i.e. state changes). Instead, the rendering is explicitly controlled by the program (even if behind the scenes it uses the original render method). I feel it greatly improves comprehension.</p>
+<p><strong>AND it scales linearly with program complexity.</strong></p>
+<p>Take a very simple extension to the previous program. Think about how the code could be modified to handle a list of users. All of them need to be asked their names and greeted. A new programmer would probably think that it would look something like this (In Javascript) -</p>
+<pre><code class="language-javascript">for(user of users) {
+  let name = prompt(&quot;What is your name&quot;)
+  alert(&quot;Hello &quot;+name)
+}
+</code></pre>
+<p>It's simple, it's clear, and if it worked it would have had no bugs.</p>
+<p>But no. We can't actually write it like that. It takes a great mental leap to get to the state based async model for this functionality.</p>
+<p>And because there is so much cruft, there are lots of ways to write this cruft. There isn't one good canonical way. Eventually you have to write something like this. It may have bugs since I just wrote it inline just now (Again in Javascript) -</p>
+<pre><code class="language-javascript">// Don't modify the original users array. Assumes a clone method.
+setInitialState({usersLeft: users.clone(), name:null})
+onRender() {
+  let {usersLeft, name} = getState()
+  if(name != null) {
+    alert(&quot;Hello &quot;+name)
+  }
+  // No else
+  let user = usersLeft.pop()
+  if(user != undefined) {
+    prompt(&quot;What is your name&quot;,
+      // Don't forget to set the modified users array
+      userInput =&gt; setState({usersLeft: usersLeft, name: userInput})
+    )
+  }
+}
+</code></pre>
+<p>Whereas, Concur lets you keep the simple model with no drawbacks. -</p>
+<p>In Purescript this is simply -</p>
+<pre><code class="language-purescript">sequence $ repeat 10 $ do
+  name &lt;- textInputEnter &quot;What is your name?&quot; true []
+  D.text $ &quot;Hello &quot; + name
+</code></pre>
+<p>And even in Javscript it's easy (Using a strange list syntax here because I didn't want to use DOM elements, but hopefully the concept is clear) -</p>
+<pre><code class="language-javascript">name = null
+for(user of users) {
+  name = yield step =&gt;
+     [ if(name != null) alert(&quot;Hello &quot;+name)
+     , prompt(&quot;What is your name&quot;, step)
+    ]
+}
+</code></pre>
+<p>Looks like programming IS really easy!</p>
+<h1><a class="header" href="#jumping-into-the-middle-of-widgets" id="jumping-into-the-middle-of-widgets">Jumping Into the Middle of Widgets</a></h1>
+<p>Taken from my answer to <a href="https://github.com/jviide/flowponent/issues/2">this question</a></p>
+<h2><a class="header" href="#qs-jump-into-the-middle-of-widgets" id="qs-jump-into-the-middle-of-widgets">Qs. Jump into the middle of widgets?</a></h2>
+<p>One downside that may be observed in practice in that generators can’t be jumped into.</p>
+<p>e.g for testing a particular state in a test, need to go through the previous parts of the functions to get there. Or for hot-module-reloading with fast dev reloads. The components can’t be re-hydrated from a previous state.</p>
+<p>Though this is purely speculative, certainly not a reason to avoid this approach as the benefits do look good 🙂</p>
+<h2><a class="header" href="#ans-1" id="ans-1">Ans.</a></h2>
+<p><strong>(All code snippets in this answer are in Javascript).</strong></p>
+<p>Hmm, I think you'd find that the flow model is pretty flexible. In particular, it's strictly more powerful than React/Redux/Elm.</p>
+<h4><a class="header" href="#for-example-you-can-simply-define-your-own-redux-in-3-lines--" id="for-example-you-can-simply-define-your-own-redux-in-3-lines--">For example, you can simply define your own redux in 3 lines -</a></h4>
+<pre><code class="language-javascript">function redux(state, render, update) {
+  let action = yield* render(state)
+  let newState = update(state, action)
+  yield* redux(newState, render, update)
+}
+</code></pre>
+<p>Then you can use it in the usual stateful way! Everything below is business logic -</p>
+<pre><code class="language-javascript">// Initial state (the name of the person)
+// To hydrate, you only need to restore this state
+let state = null
+
+// Define a render function
+// Allow the user to change the name to John
+let render = name =&gt; step =&gt;
+     [ if(name != null) alert(&quot;Hello &quot;+name)
+     , prompt(&quot;Should I call you John instead?&quot;, step)
+    ]
+
+// Update function
+// Change the state (name) to John if the user requested it
+let update = response =&gt; name =&gt;
+  response==&quot;yes&quot;? &quot;john&quot; : name
+
+// Wire everything together!
+redux(name, render, update);
+</code></pre>
+<h4><a class="header" href="#you-can-also-use-checkpoints-to-store-the-implicit-state" id="you-can-also-use-checkpoints-to-store-the-implicit-state">You can also use checkpoints to store the implicit &quot;state&quot;.</a></h4>
+<p>A checkpoint is defined as a specific series of return values encountered in a widget.</p>
+<p>Define a generic <code>checkpoint</code> function that can be used in place of <code>yield</code>.</p>
+<pre><code class="language-javascript">// This is our implicit state
+// To hydrate, you only need to restore this state
+let checkpoints = []
+// How much state has been restored?
+let checkpointIndex = 0
+
+// Yield with checkpointing
+function checkpoint(view) {
+  let ret = checkpoints[checkpointIndex]
+  if(ret !== null) {
+    checkpointIndex++
+    return ret
+  }
+
+  let ret = yield view
+  checkpoints.push(ret)
+  return ret
+}
+</code></pre>
+<p>Now write code normally, and you have checkpointing! For example, the users array code from earlier -</p>
+<pre><code class="language-javascript">name = null
+for(user of users) {
+  name = yield* checkpoint(step =&gt;
+     [ if(name != null) alert(&quot;Hello &quot;+name)
+     , prompt(&quot;What is your name&quot;, step)
+    ])
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="ferris.js"></script>
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

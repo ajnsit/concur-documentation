@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Composing Widgets with Events - The Concur UI Framework</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="ferris.css">
+        
+        <link rel="stylesheet" href="theme/2020-edition.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Concur UI Framework</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-first-concur-program.html"><strong aria-hidden="true">1.2.</strong> Your first Concur program!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-quick-tour.html"><strong aria-hidden="true">2.</strong> A Quick Tour of Concur</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch02-01-anatomy-of-a-widget.html"><strong aria-hidden="true">2.1.</strong> Anatomy of a Widget</a></li><li class="chapter-item expanded "><a href="ch02-02-widget-return-types.html"><strong aria-hidden="true">2.2.</strong> Widget Return Types</a></li><li class="chapter-item expanded "><a href="ch02-03-composing-widgets.html"><strong aria-hidden="true">2.3.</strong> Composing Widgets</a></li><li class="chapter-item expanded "><a href="ch02-04-event-handling.html"><strong aria-hidden="true">2.4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="ch02-05-modifying-dom-on-events.html"><strong aria-hidden="true">2.5.</strong> Modifying DOM on Events</a></li><li class="chapter-item expanded "><a href="ch02-06-handling-multiple-events.html"><strong aria-hidden="true">2.6.</strong> Handling Multiple Events</a></li><li class="chapter-item expanded "><a href="ch02-07-composing-widgets-with-events.html" class="active"><strong aria-hidden="true">2.7.</strong> Composing Widgets with Events</a></li><li class="chapter-item expanded "><a href="ch02-08-input-output.html"><strong aria-hidden="true">2.8.</strong> Input Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch03-00-architectural-notes.html"><strong aria-hidden="true">3.</strong> Architectural Notes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-replicating-elm-architecture.html"><strong aria-hidden="true">3.1.</strong> Replicating Elm Architecture</a></li><li class="chapter-item expanded "><a href="ch03-02-plan-for-composability-by-breaking-down-components.html"><strong aria-hidden="true">3.2.</strong> Plan for Composability by Breaking Down Components</a></li><li class="chapter-item expanded "><a href="ch03-03-composing-never-ending-widgets.html"><strong aria-hidden="true">3.3.</strong> Composing Never Ending Widgets</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-signals.html"><strong aria-hidden="true">4.</strong> Signals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-introduction-to-signals.html"><strong aria-hidden="true">4.1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ch04-02-your-first-signal.html"><strong aria-hidden="true">4.2.</strong> Your First Signal</a></li><li class="chapter-item expanded "><a href="ch04-03-introduction-to-signals.html"><strong aria-hidden="true">4.3.</strong> Converting Display Widgets</a></li><li class="chapter-item expanded "><a href="ch04-04-signal-composition.html"><strong aria-hidden="true">4.4.</strong> Signal Composition</a></li><li class="chapter-item expanded "><a href="ch04-05-signal-example.html"><strong aria-hidden="true">4.5.</strong> Signal Example</a></li><li class="chapter-item expanded "><a href="ch04-06-some-notes-on-signal-usage.html"><strong aria-hidden="true">4.6.</strong> Some Notes on Signal Usage</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-faqs.html"><strong aria-hidden="true">5.</strong> FAQs</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-why-concur.html"><strong aria-hidden="true">5.1.</strong> Why the Concur Model</a></li><li class="chapter-item expanded "><a href="ch05-02-jumping-into-the-middle-of-widgets.html"><strong aria-hidden="true">5.2.</strong> Jumping Into the Middle of Widgets</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">The Concur UI Framework</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/ajnsit/concur-documentation" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#composing-widgets-with-events" id="composing-widgets-with-events">Composing Widgets with Events</a></h1>
+<p>As previously mentioned, Concur Widgets compose seamlessly, in space, and in time, and the composition is dictated by the types of the Widgets. Let's discuss that further.</p>
+<p>The following widget will forever move between &quot;Ping&quot; and &quot;Pong&quot; buttons, and will never end. Hence it has the type <code>forall a. Widget HTML a</code></p>
+<pre><code class="language-purescript">pingPong :: forall a. Widget HTML a
+pingPong = do
+  forever $ do
+    button [onClick] [text &quot;Ping&quot;]
+    button [onClick] [text &quot;Pong&quot;]
+  text &quot;This text will never be shown&quot;
+</code></pre>
+<p>Note that all widgets, which are either static, or entirely self contained and run forever, have the type <code>forall a. Widget HTML a</code>, which can be composed with any other widget. This means that they can be dropped into any part of the layout without affecting the types or the logic of the rest of the application. So if you have a button in the middle of the UI somewhere - <code>button [onClick] [text &quot;Blah&quot;]</code> - and you wanted to add a text label alongside, the combined widget <code>div_ [text &quot;Click this button&quot; , button [onClick] [text &quot;Blah&quot;]]</code> will be conceptually equal to the button on its own.</p>
+<p>Including a formal notion of a widget lifecycle, and a return type, has distinct advantages. For example, unlike other frameworks, the user never has to manually plumb events, state, and view updates together. So if you have a counter widget which returns an Integer -</p>
+<pre><code class="language-purescript">-- A counter widget takes the initial count as argument, and returns the updated count
+counter :: Int -&gt; Widget HTML Int
+counter count = do
+  button [onClick] [text (show count)]
+  pure (count + 1)
+</code></pre>
+<p>You can compose an entire list of them easily on a webpage. The return value of the combined widget is the value of the first counter to return.</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+-- The return value is the value of the counter which is clicked
+listCounters :: Array Int -&gt; Widget HTML Int
+listCounters = orr &lt;&lt;&lt; map counter
+</code></pre>
+<p>Now if we want to distinguish which counter was updated, we can use the <code>Functor</code> instance of Widgets to tag the return type. Widgets are also <code>Applicative</code> (and as we have already seen, <code>Monad</code>). These instances, allow a natural handling of return values using <code>&lt;$&gt;</code>, <code>&lt;*&gt;</code>, <code>&lt;$</code>, monadic do-notation, etc. So we can now return the updated count tagged with the index of the Counter which was clicked -</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+-- The return value is the value which was clicked together with its index.
+listCounters :: Array Int -&gt; Widget HTML {count: Int, index: Int}
+listCounters initialCounts = orr (mapWithIndex mkCount initialCounts)
+  where mkCount index = map (\count -&gt; {index, count}) &lt;&lt;&lt; counter
+</code></pre>
+<p>See how we map over the widgets to modify the return value to a record with index.</p>
+<p>Or even better, you can simply return the modified counts together as a list, so the initial list of counts and the final list of counts have the same type.</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+listCounters :: Array Int -&gt; Widget HTML (Array Int)
+listCounters initialCounts = orr (mapWithIndex (mkCount initialCounts) initialCounts)
+  where mkCount initialCountArray index initCount = map (\count -&gt; fromMaybe initialCountArray (updateAt index count initialCountArray)) (counter initCount)
+</code></pre>
+<p>It's also important to note, that the new list widget is still short and encapsulated within a single function (<strong>As it really should be</strong>).</p>
+<p>Of course, Concur also provides a better way to show multiple widgets in parallel and collect the output from each of them. It's called <code>andd</code> and it waits until all the reponses have been received (compare with <code>orr</code> which returns the first successful response). With <code>andd</code> you can simply write -</p>
+<pre><code class="language-purescript">-- Compose a list of counters in parallel
+listCounters :: Array Int -&gt; Widget HTML (Array Int)
+listCounters initialCounts = andd (map counter initialCounts)
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="ch02-06-handling-multiple-events.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="ch02-08-input-output.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="ch02-06-handling-multiple-events.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="ch02-08-input-output.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="ferris.js"></script>
+        
+
+        
+
+    </body>
+</html>
