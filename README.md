@@ -13,7 +13,7 @@
    </a>
 </p>
 
-## The Concur UI Framework Documentation
+---
 
 This "book" was created by splitting the Concur tutorial into multiple chapters
 and rendering everything with [mdbook][mdbook].
