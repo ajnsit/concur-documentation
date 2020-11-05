@@ -15,8 +15,6 @@
 
 ## The Concur UI Framework Documentation
 
-*by Anupam Jain*
-
 This "book" was created by splitting the Concur tutorial into multiple chapters
 and rendering everything with [mdbook][mdbook].
 
