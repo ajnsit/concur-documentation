@@ -6,6 +6,7 @@ src = "src"
 title = "The Concur UI Framework"
 
 [output.html]
+theme = "docs/theme"
 additional-css = ["ferris.css", "theme/2020-edition.css"]
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/ajnsit/concur-documentation"
