@@ -15,13 +15,11 @@
 
 ---
 
-This "book" was created by splitting the Concur tutorial into multiple chapters
-and rendering everything with [mdbook][mdbook].
+This "book" was created by splitting the Concur tutorial into multiple chapters and rendering everything with [mdbook][mdbook].
 
 You can read the book online in [HTML format][site].
 
-To build this book yourself, run `mdbook build` from the root directory
-of [this repository][source].
+To build this book yourself, run `mdbook build` from the root directory of [this repository][source]. For automatic refresh during editing, you can also run `mdbook serve -o`.
 
 Community contributions are welcome!
 
