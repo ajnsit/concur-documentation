@@ -19,7 +19,7 @@ Here we use `liftEffect` to convert an effect into a widget. In Haskell, we can 
 
 Lifting IO to Widgets means we can compose IO in parallel with other Widgets. This can lead to some nice patterns. Two examples -
 
-1. Allow cancelling long running IO actions in response to GUI events, without any boilerplate. Let's say we want to create a timer which can be cancelled. The following widget will return when the timer completes after a specified duration, or when the button is pressed, whichever is first. Whenver the button is pressed, the timer thread is automatically cancelled so you don't have to do that manually.
+1. Allow cancelling long running IO actions in response to GUI events, without any boilerplate. Let's say we want to create a timer which can be cancelled. The following widget will return when the timer completes after a specified duration, or when the button is pressed, whichever is first. Whenever the button is pressed, the timer thread is automatically cancelled so you don't have to do that manually.
 
 ```purescript
 timerWidget ms = liftAff (delay (Milliseconds ms)) <|> button [unit <$ onClick] [text "Cancel"]
