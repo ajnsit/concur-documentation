@@ -1,6 +1,6 @@
 # Handling Multiple Events
 
-You can have mutliple event handlers on the same widget easily.
+You can have multiple event handlers on the same widget easily.
 
 Here's an example of an input element with both change and focus handlers.
 
