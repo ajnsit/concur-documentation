@@ -13,7 +13,7 @@ pingPong = do
   text "This text will never be shown"
 ```
 
-Note that all widgets, which are either static, or entirely self contained and run forever, have the type `forall a. Widget HTML a`, which can be composed with any other widget. This means that they can be dropped into any part of the layout without affecting the types or the logic of the rest of the application. So if you have a button in the middle of the UI somewhere - `button [onClick] [text "Blah"]` - and you wanted to add a text label alongside, the combined widget `div_ [text "Click this button" , button [onClick] [text "Blah"]]` will be conceptually equal to the button on its own.
+Note that all widgets, which are either static, or entirely self contained and run forever, have the type `forall a. Widget HTML a`, which can be composed with any other widget. This means that they can be dropped into any part of the layout without affecting the types or the logic of the rest of the application. So if you have a button in the middle of the UI somewhere - `button [onClick] [text "Blah"]` - and you wanted to add a text label alongside, the combined widget `div' [text "Click this button" , button [onClick] [text "Blah"]]` will be conceptually equal to the button on its own.
 
 Including a formal notion of a widget lifecycle, and a return type, has distinct advantages. For example, unlike other frameworks, the user never has to manually plumb events, state, and view updates together. So if you have a counter widget which returns an Integer -
 
